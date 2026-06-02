@@ -6,140 +6,809 @@
 <title>Nessos CAM-E59MB — Live Viewer</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Exo+2:wght@300;400;600;700&display=swap');
-
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NESSOS CAM-E59MB — Control Panel</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Barlow:wght@300;400;500;600;700&family=Barlow+Condensed:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
 :root {
-  --bg:      #080b12;
-  --panel:   #0e1320;
-  --panel2:  #131928;
-  --border:  #1c2640;
-  --accent:  #00e5ff;
-  --accent2: #ff4500;
-  --ok:      #00ff88;
-  --warn:    #ffcc00;
-  --text:    #c8d8f0;
-  --muted:   #3e506e;
-  --mono:    'Share Tech Mono', monospace;
-  --sans:    'Exo 2', sans-serif;
+  --bg:       #07090f;
+  --surface:  #0c1018;
+  --surface2: #111722;
+  --border:   #1a2236;
+  --border2:  #243046;
+  --accent:   #00d4ff;
+  --accent2:  #ff5c35;
+  --ok:       #00e87a;
+  --warn:     #ffb930;
+  --text:     #d4e4f7;
+  --muted:    #3d526e;
+  --dimmed:   #7a96b8;
+  --mono:     'Share Tech Mono', monospace;
+  --sans:     'Barlow', sans-serif;
+  --cond:     'Barlow Condensed', sans-serif;
 }
-
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-body {
-  background: var(--bg);
-  color: var(--text);
-  font-family: var(--sans);
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;overflow:hidden}
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:var(--sans);
+  display:flex;
+  flex-direction:column;
   background-image:
-    radial-gradient(ellipse 80% 50% at 50% -20%, rgba(0,229,255,0.06), transparent),
-    repeating-linear-gradient(0deg, transparent, transparent 39px, rgba(0,229,255,0.025) 39px, rgba(0,229,255,0.025) 40px),
-    repeating-linear-gradient(90deg, transparent, transparent 39px, rgba(0,229,255,0.025) 39px, rgba(0,229,255,0.025) 40px);
+    radial-gradient(ellipse 60% 40% at 50% -10%, rgba(0,212,255,0.05) 0%, transparent 70%),
+    repeating-linear-gradient(0deg,transparent,transparent 59px,rgba(0,212,255,0.018) 59px,rgba(0,212,255,0.018) 60px),
+    repeating-linear-gradient(90deg,transparent,transparent 59px,rgba(0,212,255,0.018) 59px,rgba(0,212,255,0.018) 60px);
 }
 
 /* ── HEADER ── */
-header {
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 12px 24px;
-  border-bottom: 1px solid var(--border);
-  background: rgba(8,11,18,0.96);
-  backdrop-filter: blur(8px);
-  position: sticky; top: 0; z-index: 100;
+header{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 20px;height:52px;
+  border-bottom:1px solid var(--border);
+  background:rgba(7,9,15,0.97);
+  flex-shrink:0;
+  position:relative;z-index:50;
 }
-.logo { display: flex; align-items: center; gap: 12px; }
-.logo-icon {
-  width: 34px; height: 34px;
-  background: linear-gradient(135deg, var(--accent), #0090a8);
-  border-radius: 50%;
-  display: grid; place-items: center;
-  box-shadow: 0 0 16px rgba(0,229,255,0.5);
-  flex-shrink: 0;
+.logo{display:flex;align-items:center;gap:14px}
+.logo-badge{
+  display:flex;align-items:center;gap:0;
+  border:1px solid var(--accent);
+  border-radius:4px;
+  overflow:hidden;
 }
-.logo-icon svg { width: 18px; height: 18px; fill: #000; }
-.logo-text { font-size: 1rem; font-weight: 700; letter-spacing: .1em; color: #fff; }
-.logo-sub  { font-family: var(--mono); font-size: .62rem; color: var(--muted); letter-spacing: .06em; }
-.header-right { display: flex; align-items: center; gap: 16px; }
-.header-status { display: flex; align-items: center; gap: 7px; font-family: var(--mono); font-size: .72rem; }
-.dot { width: 8px; height: 8px; border-radius: 50%; background: var(--muted); flex-shrink: 0; }
-.dot.live  { background: var(--ok);     box-shadow: 0 0 8px var(--ok);     animation: pulse 1.6s infinite; }
-.dot.error { background: var(--accent2);box-shadow: 0 0 8px var(--accent2);}
-@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.3} }
+.logo-badge-left{
+  background:var(--accent);
+  padding:4px 9px;
+  font-family:var(--cond);
+  font-weight:700;font-size:.9rem;
+  color:#000;letter-spacing:.08em;
+  line-height:1;
+}
+.logo-badge-right{
+  padding:4px 9px;
+  font-family:var(--cond);
+  font-weight:600;font-size:.9rem;
+  color:var(--accent);letter-spacing:.06em;
+  line-height:1;
+}
+.logo-model{
+  font-family:var(--mono);
+  font-size:.65rem;color:var(--muted);letter-spacing:.1em;
+  line-height:1;
+}
+.logo-stack{display:flex;flex-direction:column;gap:3px}
 
-/* ── LAYOUT ── */
-main {
-  flex: 1;
-  display: grid;
-  grid-template-columns: 1fr 300px;
+.hdr-center{
+  position:absolute;left:50%;transform:translateX(-50%);
+  display:flex;align-items:center;gap:20px;
+}
+.hdr-stat{display:flex;flex-direction:column;align-items:center;gap:1px}
+.hdr-stat-val{font-family:var(--mono);font-size:.78rem;color:var(--text);line-height:1}
+.hdr-stat-lbl{font-size:.6rem;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;line-height:1}
+.hdr-div{width:1px;height:28px;background:var(--border)}
+
+.hdr-right{display:flex;align-items:center;gap:12px}
+.status-pill{
+  display:flex;align-items:center;gap:7px;
+  padding:5px 12px;
+  border-radius:3px;
+  border:1px solid var(--border2);
+  background:var(--surface);
+  font-family:var(--mono);font-size:.68rem;letter-spacing:.04em;
+  cursor:default;
+}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--muted);flex-shrink:0}
+.dot.live{background:var(--ok);box-shadow:0 0 8px var(--ok);animation:blink 1.8s infinite}
+.dot.error{background:var(--accent2);box-shadow:0 0 8px var(--accent2)}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.25}}
+
+.btn-hdr{
+  height:32px;padding:0 14px;
+  background:transparent;border:1px solid var(--border2);border-radius:3px;
+  color:var(--dimmed);font-family:var(--sans);font-size:.78rem;font-weight:500;
+  cursor:pointer;transition:all .15s;letter-spacing:.02em;
+}
+.btn-hdr:hover{border-color:var(--accent);color:var(--accent);background:rgba(0,212,255,.06)}
+
+/* ── MAIN ── */
+main{
+  flex:1;display:grid;
+  grid-template-columns:1fr 280px;
+  overflow:hidden;
 }
 
 /* ── VIDEO SECTION ── */
-.video-section { padding: 20px; display: flex; flex-direction: column; gap: 14px; }
-
-.video-wrapper {
-  position: relative;
-  background: #000;
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  overflow: hidden;
-  aspect-ratio: 4/3;
-  max-height: 65vh;
-  box-shadow: 0 0 40px rgba(0,0,0,0.8), inset 0 0 0 1px rgba(0,229,255,0.08);
+.video-section{
+  display:flex;flex-direction:column;gap:0;
+  padding:16px 16px 16px 20px;
+  overflow:hidden;
 }
-.video-wrapper img#stream {
-  width: 100%; height: 100%;
-  object-fit: contain;
-  display: block;
+.video-container{
+  position:relative;flex:1;min-height:0;
+  background:#000;
+  border:1px solid var(--border);
+  border-radius:6px;
+  overflow:hidden;
 }
+.video-container img#stream{
+  width:100%;height:100%;
+  object-fit:contain;display:block;
+}
+/* corner-bracket decoration */
+.corner{position:absolute;width:16px;height:16px;z-index:4;pointer-events:none}
+.corner.tl{top:8px;left:8px;border-top:2px solid var(--accent);border-left:2px solid var(--accent)}
+.corner.tr{top:8px;right:8px;border-top:2px solid var(--accent);border-right:2px solid var(--accent)}
+.corner.bl{bottom:8px;left:8px;border-bottom:2px solid var(--accent);border-left:2px solid var(--accent)}
+.corner.br{bottom:8px;right:8px;border-bottom:2px solid var(--accent);border-right:2px solid var(--accent)}
 /* scanlines */
-.video-wrapper::after {
-  content: '';
-  position: absolute; inset: 0;
-  background: repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(0,0,0,0.07) 3px, rgba(0,0,0,0.07) 4px);
-  pointer-events: none; z-index: 2;
+.video-container::after{
+  content:'';position:absolute;inset:0;z-index:3;
+  background:repeating-linear-gradient(0deg,transparent,transparent 3px,rgba(0,0,0,0.06) 3px,rgba(0,0,0,0.06) 4px);
+  pointer-events:none;
 }
-.overlay-corner {
-  position: absolute; top: 10px; left: 10px; z-index: 3;
-  font-family: var(--mono); font-size: .66rem;
-  color: rgba(0,229,255,.75);
-  text-shadow: 0 0 8px var(--accent);
-  pointer-events: none;
-  line-height: 1.7;
+.overlay-info{
+  position:absolute;top:14px;left:14px;z-index:5;
+  font-family:var(--mono);font-size:.62rem;line-height:1.9;
+  color:rgba(0,212,255,.8);
+  text-shadow:0 0 10px rgba(0,212,255,.5);
+  pointer-events:none;
 }
-.overlay-rec {
-  position: absolute; top: 10px; right: 12px; z-index: 3;
-  display: flex; align-items: center; gap: 5px;
-  font-family: var(--mono); font-size: .62rem; color: var(--accent2);
-  pointer-events: none;
+.overlay-rec{
+  position:absolute;top:12px;right:12px;z-index:5;
+  display:flex;align-items:center;gap:5px;
+  font-family:var(--mono);font-size:.6rem;color:var(--accent2);
+  pointer-events:none;
 }
-.rec-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent2); animation: pulse 1s infinite; }
+.rec-dot{width:5px;height:5px;border-radius:50%;background:var(--accent2);animation:blink 1s infinite}
 
-.video-placeholder {
-  position: absolute; inset: 0; z-index: 4;
-  display: flex; flex-direction: column;
-  align-items: center; justify-content: center;
-  gap: 14px; background: #000;
-  color: var(--muted); font-family: var(--mono); font-size: .8rem; text-align: center; padding: 20px;
+.placeholder{
+  position:absolute;inset:0;z-index:6;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;
+  background:#000;color:var(--muted);font-family:var(--mono);font-size:.75rem;text-align:center;padding:20px;
 }
-.video-placeholder svg { opacity: .15; }
-.video-placeholder .hint { color: var(--accent); font-size: .72rem; }
+.placeholder svg{opacity:.1}
+.placeholder .hint{color:var(--accent);font-size:.68rem;margin-top:4px}
+.placeholder .cam-url{font-size:.6rem;color:var(--border2);margin-top:8px;word-break:break-all;max-width:320px}
 
-/* ── PTZ OVERLAY ON VIDEO ── */
-.ptz-overlay {
-  position: absolute; bottom: 14px; right: 14px; z-index: 5;
-  display: none; /* shown when connected */
-  flex-direction: column; align-items: center; gap: 3px;
+/* bottom toolbar under video */
+.video-toolbar{
+  display:flex;align-items:center;gap:8px;
+  padding:10px 0 0;
 }
-.ptz-overlay.visible { display: flex; }
-.ptz-row { display: flex; gap: 3px; }
+.btn-tool{
+  height:30px;padding:0 12px;
+  background:var(--surface);border:1px solid var(--border2);border-radius:3px;
+  color:var(--dimmed);font-size:.73rem;font-family:var(--sans);font-weight:500;
+  cursor:pointer;transition:all .15s;white-space:nowrap;
+}
+.btn-tool:hover{border-color:var(--accent);color:var(--accent);background:rgba(0,212,255,.06)}
+.btn-tool.active{border-color:var(--accent);color:var(--accent);background:rgba(0,212,255,.12)}
+.btn-tool.danger{border-color:var(--border2);color:var(--accent2)}
+.btn-tool.danger:hover{border-color:var(--accent2);background:rgba(255,92,53,.08)}
+.spacer{flex:1}
+.quality-badge{
+  font-family:var(--mono);font-size:.62rem;color:var(--muted);
+  padding:0 8px;border-left:1px solid var(--border);
+}
 
-.ptz-btn {
-  width: 44px; height: 44px;
-  background: rgba(8,11,18,0.82);
-  border: 1px solid rgba(0,229,255,0.35);
-  border-radius: 6px;
-  color: var(--accent);
-  cursor: pointer;
-  display: grid; place-items: center;
+/* ── RIGHT PANEL ── */
+.right-panel{
+  display:flex;flex-direction:column;
+  border-left:1px solid var(--border);
+  overflow-y:auto;overflow-x:hidden;
+  background:var(--surface);
+}
+.panel-section{
+  border-bottom:1px solid var(--border);
+  padding:14px 16px;
+}
+.panel-title{
+  font-family:var(--cond);font-size:.72rem;font-weight:600;
+  letter-spacing:.14em;text-transform:uppercase;
+  color:var(--muted);margin-bottom:12px;
+}
+
+/* ── PTZ CONTROL ── */
+.ptz-ring{
+  display:flex;flex-direction:column;align-items:center;gap:4px;
+  margin-bottom:12px;
+}
+.ptz-row{display:flex;gap:4px;align-items:center}
+.ptz-btn{
+  width:52px;height:44px;
+  background:var(--surface2);
+  border:1px solid var(--border2);border-radius:4px;
+  color:var(--dimmed);cursor:pointer;
+  display:grid;place-items:center;
+  transition:all .12s;font-size:1.2rem;
+  user-select:none;-webkit-user-select:none;
+}
+.ptz-btn:hover{background:rgba(0,212,255,.08);border-color:var(--accent);color:var(--accent)}
+.ptz-btn:active{background:rgba(0,212,255,.18);transform:scale(.94)}
+.ptz-center{
+  width:44px;height:44px;
+  background:var(--surface2);
+  border:1px solid var(--border2);border-radius:50%;
+  color:var(--dimmed);cursor:pointer;
+  display:grid;place-items:center;
+  transition:all .12s;font-size:.9rem;
+}
+.ptz-center:hover{background:rgba(0,212,255,.08);border-color:var(--accent);color:var(--accent)}
+.ptz-center:active{transform:scale(.94)}
+.ptz-arrow{width:0;height:0;display:block}
+.ptz-arrow.up{border-left:7px solid transparent;border-right:7px solid transparent;border-bottom:10px solid currentColor}
+.ptz-arrow.down{border-left:7px solid transparent;border-right:7px solid transparent;border-top:10px solid currentColor}
+.ptz-arrow.left{border-top:7px solid transparent;border-bottom:7px solid transparent;border-right:10px solid currentColor}
+.ptz-arrow.right{border-top:7px solid transparent;border-bottom:7px solid transparent;border-left:10px solid currentColor}
+
+/* zoom + iris row */
+.ctrl-row{display:flex;gap:6px;margin-top:4px}
+.ctrl-group{flex:1;display:flex;flex-direction:column;gap:4px}
+.ctrl-label{font-family:var(--mono);font-size:.58rem;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;text-align:center}
+.ctrl-btns{display:flex;gap:3px}
+.ctrl-btn{
+  flex:1;height:32px;
+  background:var(--surface2);border:1px solid var(--border2);border-radius:3px;
+  color:var(--dimmed);cursor:pointer;font-size:.75rem;font-weight:600;
+  transition:all .12s;font-family:var(--sans);
+}
+.ctrl-btn:hover{background:rgba(0,212,255,.08);border-color:var(--accent);color:var(--accent)}
+.ctrl-btn:active{transform:scale(.94)}
+
+/* presets */
+.preset-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.preset-btn{
+  height:34px;
+  background:var(--surface2);border:1px solid var(--border2);border-radius:3px;
+  color:var(--dimmed);font-family:var(--mono);font-size:.68rem;
+  cursor:pointer;transition:all .12s;display:flex;align-items:center;justify-content:center;gap:6px;
+}
+.preset-btn:hover{background:rgba(0,212,255,.06);border-color:var(--border);color:var(--text)}
+.preset-btn.set-mode{border-color:var(--warn);color:var(--warn);background:rgba(255,185,48,.06)}
+
+/* settings form */
+.form-row{display:flex;flex-direction:column;gap:4px;margin-bottom:10px}
+.form-row label{font-family:var(--mono);font-size:.62rem;color:var(--muted);letter-spacing:.06em}
+.form-row input{
+  height:32px;
+  background:var(--bg);border:1px solid var(--border2);border-radius:3px;
+  color:var(--text);font-family:var(--mono);font-size:.72rem;
+  padding:0 10px;width:100%;
+  outline:none;transition:border-color .15s;
+}
+.form-row input:focus{border-color:var(--accent)}
+.form-row input::placeholder{color:var(--muted)}
+
+.btn-connect{
+  width:100%;height:34px;
+  background:var(--accent);border:none;border-radius:3px;
+  color:#000;font-family:var(--cond);font-size:.85rem;font-weight:700;
+  cursor:pointer;letter-spacing:.06em;text-transform:uppercase;
+  transition:all .15s;
+}
+.btn-connect:hover{background:#00f0ff;box-shadow:0 0 16px rgba(0,212,255,.35)}
+.btn-connect:active{transform:scale(.98)}
+
+/* log */
+.log-box{
+  background:var(--bg);border:1px solid var(--border);border-radius:3px;
+  padding:8px;max-height:80px;overflow-y:auto;
+  font-family:var(--mono);font-size:.6rem;line-height:1.7;
+  color:var(--muted);
+}
+.log-entry{display:block}
+.log-entry.ok{color:var(--ok)}
+.log-entry.err{color:var(--accent2)}
+.log-entry.info{color:var(--accent)}
+
+/* toast */
+#toast{
+  position:fixed;bottom:20px;left:50%;transform:translateX(-50%);
+  background:var(--surface2);border:1px solid var(--border2);border-radius:4px;
+  padding:8px 18px;font-family:var(--mono);font-size:.72rem;
+  color:var(--text);z-index:200;opacity:0;
+  transition:opacity .25s;pointer-events:none;white-space:nowrap;
+}
+#toast.show{opacity:1}
+
+/* scrollbar */
+::-webkit-scrollbar{width:4px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">
+    <div class="logo-badge">
+      <span class="logo-badge-left">NESSOS</span>
+      <span class="logo-badge-right">CAM</span>
+    </div>
+    <div class="logo-stack">
+      <span class="logo-model">E59MB · IP CAMERA CONTROL</span>
+    </div>
+  </div>
+
+  <div class="hdr-center">
+    <div class="hdr-stat">
+      <span class="hdr-stat-val" id="hdr-ip">—</span>
+      <span class="hdr-stat-lbl">Address</span>
+    </div>
+    <div class="hdr-div"></div>
+    <div class="hdr-stat">
+      <span class="hdr-stat-val" id="hdr-time">—</span>
+      <span class="hdr-stat-lbl">Local Time</span>
+    </div>
+    <div class="hdr-div"></div>
+    <div class="hdr-stat">
+      <span class="hdr-stat-val" id="hdr-fps">— FPS</span>
+      <span class="hdr-stat-lbl">Refresh</span>
+    </div>
+  </div>
+
+  <div class="hdr-right">
+    <div class="status-pill" id="status-pill">
+      <span class="dot" id="status-dot"></span>
+      <span id="status-text">OFFLINE</span>
+    </div>
+    <button class="btn-hdr" onclick="toggleFullscreen()">⛶ FULLSCREEN</button>
+  </div>
+</header>
+
+<main>
+  <!-- VIDEO -->
+  <div class="video-section">
+    <div class="video-container" id="videoContainer">
+      <!-- corner brackets -->
+      <div class="corner tl"></div><div class="corner tr"></div>
+      <div class="corner bl"></div><div class="corner br"></div>
+
+      <div class="overlay-info" id="overlayInfo">
+        IP: —<br>
+        <span id="tsLabel">—</span>
+      </div>
+      <div class="overlay-rec" id="overlayRec" style="display:none">
+        <span class="rec-dot"></span> LIVE
+      </div>
+
+      <div class="placeholder" id="placeholder">
+        <svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+          <rect x="2" y="7" width="20" height="14" rx="2"/>
+          <path d="M16 3l-4 4-4-4"/>
+          <circle cx="12" cy="14" r="3"/>
+        </svg>
+        <span>CAMERA OFFLINE</span>
+        <span class="hint">Configure camera settings below and click CONNECT</span>
+        <span class="cam-url" id="urlPreview">—</span>
+      </div>
+
+      <img id="stream" src="" alt="Camera stream" style="display:none">
+    </div>
+
+    <div class="video-toolbar">
+      <button class="btn-tool" onclick="takeSnapshot()">📷 SNAPSHOT</button>
+      <button class="btn-tool" id="btn-patrol" onclick="togglePatrol()">⟳ H-PATROL</button>
+      <button class="btn-tool" onclick="sendCmd(25)" title="Go to center/home position">⌂ HOME</button>
+      <span class="spacer"></span>
+      <button class="btn-tool danger" id="btn-disconnect" onclick="disconnect()" style="display:none">✕ DISCONNECT</button>
+      <span class="quality-badge" id="qualBadge">MJPEG · AUTO</span>
+    </div>
+  </div>
+
+  <!-- RIGHT PANEL -->
+  <div class="right-panel">
+
+    <!-- CONNECTION -->
+    <div class="panel-section">
+      <div class="panel-title">Connection</div>
+      <div class="form-row">
+        <label>IP ADDRESS : PORT</label>
+        <input type="text" id="inp-ip" value="192.168.100.155:13900" placeholder="192.168.100.155:13900">
+      </div>
+      <div class="form-row">
+        <label>USERNAME</label>
+        <input type="text" id="inp-user" value="admin" placeholder="admin">
+      </div>
+      <div class="form-row">
+        <label>PASSWORD</label>
+        <input type="password" id="inp-pwd" value="" placeholder="(leave blank if none)">
+      </div>
+      <button class="btn-connect" id="btn-connect" onclick="connect()">CONNECT</button>
+    </div>
+
+    <!-- PTZ CONTROL -->
+    <div class="panel-section">
+      <div class="panel-title">PTZ Control</div>
+      <div class="ptz-ring">
+        <div class="ptz-row">
+          <div style="width:52px"></div>
+          <button class="ptz-btn" id="ptz-up"
+            onmousedown="startMove(2)" onmouseup="stopMove(3)"
+            ontouchstart="startMove(2)" ontouchend="stopMove(3)">
+            <span class="ptz-arrow up"></span>
+          </button>
+          <div style="width:52px"></div>
+        </div>
+        <div class="ptz-row">
+          <button class="ptz-btn" id="ptz-left"
+            onmousedown="startMove(6)" onmouseup="stopMove(7)"
+            ontouchstart="startMove(6)" ontouchend="stopMove(7)">
+            <span class="ptz-arrow left"></span>
+          </button>
+          <button class="ptz-center" onclick="sendCmd(25)" title="Home / Center">⌂</button>
+          <button class="ptz-btn" id="ptz-right"
+            onmousedown="startMove(4)" onmouseup="stopMove(5)"
+            ontouchstart="startMove(4)" ontouchend="stopMove(5)">
+            <span class="ptz-arrow right"></span>
+          </button>
+        </div>
+        <div class="ptz-row">
+          <div style="width:52px"></div>
+          <button class="ptz-btn" id="ptz-down"
+            onmousedown="startMove(0)" onmouseup="stopMove(1)"
+            ontouchstart="startMove(0)" ontouchend="stopMove(1)">
+            <span class="ptz-arrow down"></span>
+          </button>
+          <div style="width:52px"></div>
+        </div>
+      </div>
+
+      <!-- Diagonal -->
+      <div class="ctrl-row" style="margin-bottom:10px">
+        <button class="ctrl-btn" onmousedown="startMove(92)" onmouseup="stopMove(1)" title="↙ Left-Down">↙</button>
+        <button class="ctrl-btn" onmousedown="startMove(90)" onmouseup="stopMove(1)" title="↖ Left-Up">↖</button>
+        <button class="ctrl-btn" onmousedown="startMove(91)" onmouseup="stopMove(1)" title="↗ Right-Up">↗</button>
+        <button class="ctrl-btn" onmousedown="startMove(93)" onmouseup="stopMove(1)" title="↘ Right-Down">↘</button>
+      </div>
+
+      <div class="ctrl-row">
+        <div class="ctrl-group">
+          <span class="ctrl-label">Zoom</span>
+          <div class="ctrl-btns">
+            <button class="ctrl-btn"
+              onmousedown="startMove(18)" onmouseup="stopMove(19)" title="Zoom In">＋</button>
+            <button class="ctrl-btn"
+              onmousedown="startMove(16)" onmouseup="stopMove(17)" title="Zoom Out">－</button>
+          </div>
+        </div>
+        <div class="ctrl-group">
+          <span class="ctrl-label">Focus</span>
+          <div class="ctrl-btns">
+            <button class="ctrl-btn"
+              onmousedown="startMove(34)" onmouseup="stopMove(35)" title="Focus +">＋</button>
+            <button class="ctrl-btn"
+              onmousedown="startMove(36)" onmouseup="stopMove(37)" title="Focus -">－</button>
+          </div>
+        </div>
+        <div class="ctrl-group">
+          <span class="ctrl-label">Iris</span>
+          <div class="ctrl-btns">
+            <button class="ctrl-btn"
+              onmousedown="startMove(40)" onmouseup="stopMove(41)" title="Iris Open">＋</button>
+            <button class="ctrl-btn"
+              onmousedown="startMove(42)" onmouseup="stopMove(43)" title="Iris Close">－</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Speed -->
+      <div class="form-row" style="margin-top:10px;gap:6px">
+        <label>MOVE SPEED (0–100)</label>
+        <div style="display:flex;align-items:center;gap:8px">
+          <input type="range" id="speed-range" min="0" max="100" value="30"
+            style="flex:1;height:4px;accent-color:var(--accent)">
+          <span style="font-family:var(--mono);font-size:.72rem;color:var(--text);min-width:28px;text-align:right" id="speed-val">30</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- PRESETS -->
+    <div class="panel-section">
+      <div class="panel-title">Presets</div>
+      <div class="preset-grid" id="preset-grid">
+        <!-- filled by JS -->
+      </div>
+      <div style="display:flex;gap:6px;margin-top:8px">
+        <button class="ctrl-btn" onclick="toggleSetMode()" id="btn-setmode"
+          style="height:30px;font-size:.68rem;font-family:var(--mono)">SET MODE</button>
+        <button class="ctrl-btn" onclick="sendCmd(25)"
+          style="height:30px;font-size:.68rem;font-family:var(--mono)">HOME</button>
+      </div>
+    </div>
+
+    <!-- LOG -->
+    <div class="panel-section">
+      <div class="panel-title">Activity Log</div>
+      <div class="log-box" id="log-box"></div>
+    </div>
+
+  </div>
+</main>
+
+<div id="toast"></div>
+
+<script>
+const CAM = {
+  ip: '192.168.100.155:13900',
+  user: 'admin',
+  pwd: '',
+  connected: false,
+  patrolling: false,
+  settingPreset: false,
+  streamTimer: null,
+  clockTimer: null,
+  frameCount: 0,
+  fpsTimer: null,
+};
+
+const PRESETS = [
+  {id:0,label:'PRESET 1'},{id:1,label:'PRESET 2'},
+  {id:2,label:'PRESET 3'},{id:3,label:'PRESET 4'},
+  {id:4,label:'PRESET 5'},{id:5,label:'PRESET 6'},
+];
+
+/* ── INIT ── */
+document.getElementById('inp-ip').addEventListener('input', updateUrlPreview);
+document.getElementById('inp-user').addEventListener('input', updateUrlPreview);
+document.getElementById('inp-pwd').addEventListener('input', updateUrlPreview);
+document.getElementById('speed-range').addEventListener('input', function(){
+  document.getElementById('speed-val').textContent = this.value;
+});
+document.addEventListener('contextmenu', e => e.preventDefault());
+buildPresets();
+updateUrlPreview();
+startClock();
+
+function buildPresets() {
+  const grid = document.getElementById('preset-grid');
+  grid.innerHTML = '';
+  PRESETS.forEach(p => {
+    const btn = document.createElement('button');
+    btn.className = 'preset-btn';
+    btn.id = 'preset-' + p.id;
+    btn.textContent = p.label;
+    btn.onclick = () => gotoOrSetPreset(p.id);
+    grid.appendChild(btn);
+  });
+}
+
+function updateUrlPreview() {
+  const ip = document.getElementById('inp-ip').value.trim();
+  const user = document.getElementById('inp-user').value.trim();
+  const url = `http://${ip}/videostream.cgi?user=${user}&pwd=***`;
+  document.getElementById('urlPreview').textContent = url;
+  document.getElementById('hdr-ip').textContent = ip;
+}
+
+function startClock() {
+  function tick() {
+    const now = new Date();
+    const t = now.toTimeString().slice(0,8);
+    document.getElementById('hdr-time').textContent = t;
+    document.getElementById('tsLabel').textContent = now.toLocaleDateString() + '  ' + t;
+  }
+  tick();
+  CAM.clockTimer = setInterval(tick, 1000);
+}
+
+/* ── CONNECT / DISCONNECT ── */
+function connect() {
+  CAM.ip   = document.getElementById('inp-ip').value.trim();
+  CAM.user = document.getElementById('inp-user').value.trim();
+  CAM.pwd  = document.getElementById('inp-pwd').value;
+
+  const streamUrl = `http://${CAM.ip}/videostream.cgi?user=${CAM.user}&pwd=${CAM.pwd}`;
+  const img = document.getElementById('stream');
+  img.src = streamUrl;
+
+  img.onload = () => {
+    document.getElementById('placeholder').style.display = 'none';
+    img.style.display = 'block';
+    setConnected(true);
+    log('Stream connected: ' + CAM.ip, 'ok');
+  };
+  img.onerror = () => {
+    // Try snapshot fallback
+    trySnapshotMode();
+  };
+
+  document.getElementById('overlayInfo').innerHTML =
+    `IP: ${CAM.ip}<br><span id="tsLabel">—</span>`;
+
+  log('Connecting to ' + CAM.ip + ' …', 'info');
+  setStatus('CONNECTING', false);
+}
+
+function trySnapshotMode() {
+  // Fallback: refresh snapshot every 500ms
+  const snapUrl = `http://${CAM.ip}/snapshot.cgi?user=${CAM.user}&pwd=${CAM.pwd}`;
+  const img = document.getElementById('stream');
+
+  let ok = false;
+  const testImg = new Image();
+  testImg.onload = () => {
+    ok = true;
+    document.getElementById('placeholder').style.display = 'none';
+    img.style.display = 'block';
+    setConnected(true);
+    log('Snapshot mode active (MJPEG fallback)', 'ok');
+    document.getElementById('qualBadge').textContent = 'SNAPSHOT · 2 FPS';
+    // refresh loop
+    CAM.streamTimer = setInterval(() => {
+      img.src = snapUrl + '&t=' + Date.now();
+    }, 500);
+  };
+  testImg.onerror = () => {
+    setStatus('ERROR', true);
+    setConnected(false);
+    log('Connection failed — check IP, credentials, and CORS', 'err');
+    toast('Connection failed. Check browser console for details.');
+  };
+  testImg.src = snapUrl + '&t=' + Date.now();
+}
+
+function disconnect() {
+  clearInterval(CAM.streamTimer);
+  const img = document.getElementById('stream');
+  img.src = '';
+  img.style.display = 'none';
+  document.getElementById('placeholder').style.display = 'flex';
+  setConnected(false);
+  log('Disconnected', 'info');
+  toast('Camera disconnected');
+}
+
+function setConnected(on) {
+  CAM.connected = on;
+  setStatus(on ? 'LIVE' : 'OFFLINE', !on);
+  document.getElementById('overlayRec').style.display = on ? 'flex' : 'none';
+  document.getElementById('btn-disconnect').style.display = on ? '' : 'none';
+  document.getElementById('btn-connect').textContent = on ? 'RECONNECT' : 'CONNECT';
+}
+
+function setStatus(txt, isError) {
+  const dot = document.getElementById('status-dot');
+  const label = document.getElementById('status-text');
+  dot.className = 'dot' + (txt === 'LIVE' ? ' live' : isError ? ' error' : '');
+  label.textContent = txt;
+}
+
+/* ── CGI COMMANDS ── */
+function cgiUrl(path, params = {}) {
+  let url = `http://${CAM.ip}/${path}?user=${CAM.user}&pwd=${CAM.pwd}`;
+  for (const [k, v] of Object.entries(params)) url += `&${k}=${v}`;
+  return url;
+}
+
+function sendCmd(cmd, extra = {}) {
+  if (!CAM.connected) { toast('Camera not connected'); return; }
+  const speed = parseInt(document.getElementById('speed-range').value);
+  const url = cgiUrl('decoder_control.cgi', { command: cmd, onestep: 0, ...extra });
+  fetch(url, { mode: 'no-cors' })
+    .then(() => log(`CMD ${cmd} sent`, 'ok'))
+    .catch(() => log(`CMD ${cmd} failed`, 'err'));
+}
+
+function startMove(cmd) {
+  if (!CAM.connected) { toast('Camera not connected'); return; }
+  const speed = parseInt(document.getElementById('speed-range').value);
+  const url = cgiUrl('decoder_control.cgi', { command: cmd, onestep: 0, speed });
+  fetch(url, { mode: 'no-cors' }).catch(() => {});
+  log(`PTZ move cmd=${cmd}`, 'ok');
+}
+
+function stopMove(cmd) {
+  if (!CAM.connected) return;
+  const url = cgiUrl('decoder_control.cgi', { command: cmd });
+  fetch(url, { mode: 'no-cors' }).catch(() => {});
+}
+
+/* ── PRESETS ── */
+function gotoOrSetPreset(id) {
+  if (!CAM.connected) { toast('Camera not connected'); return; }
+  if (CAM.settingPreset) {
+    const setCmd = 30 + (id * 2);
+    sendCmd(setCmd);
+    log(`Preset ${id+1} saved`, 'ok');
+    toast(`Preset ${id+1} saved`);
+    toggleSetMode(false);
+  } else {
+    const goCmd = 31 + (id * 2);
+    sendCmd(goCmd);
+    log(`Go to preset ${id+1}`, 'info');
+  }
+}
+
+function toggleSetMode(force) {
+  CAM.settingPreset = force !== undefined ? force : !CAM.settingPreset;
+  const btn = document.getElementById('btn-setmode');
+  const btns = document.querySelectorAll('.preset-btn');
+  if (CAM.settingPreset) {
+    btn.style.borderColor = 'var(--warn)';
+    btn.style.color = 'var(--warn)';
+    btn.textContent = '✕ CANCEL';
+    btns.forEach(b => b.classList.add('set-mode'));
+    toast('Click a preset slot to save current position');
+  } else {
+    btn.style.borderColor = '';btn.style.color = '';
+    btn.textContent = 'SET MODE';
+    btns.forEach(b => b.classList.remove('set-mode'));
+  }
+}
+
+/* ── PATROL ── */
+function togglePatrol() {
+  if (!CAM.connected) { toast('Camera not connected'); return; }
+  CAM.patrolling = !CAM.patrolling;
+  const cmd = CAM.patrolling ? 28 : 29;
+  sendCmd(cmd);
+  const btn = document.getElementById('btn-patrol');
+  btn.classList.toggle('active', CAM.patrolling);
+  btn.textContent = CAM.patrolling ? '⏹ STOP PATROL' : '⟳ H-PATROL';
+  log(CAM.patrolling ? 'H-Patrol started' : 'Patrol stopped', 'info');
+}
+
+/* ── SNAPSHOT ── */
+function takeSnapshot() {
+  if (!CAM.connected) { toast('Camera not connected'); return; }
+  const url = cgiUrl('snapshot.cgi');
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `nessos_snap_${Date.now()}.jpg`;
+  a.target = '_blank';
+  a.click();
+  log('Snapshot captured', 'ok');
+  toast('Snapshot saved');
+}
+
+/* ── FULLSCREEN ── */
+function toggleFullscreen() {
+  const vc = document.getElementById('videoContainer');
+  if (!document.fullscreenElement) {
+    vc.requestFullscreen && vc.requestFullscreen();
+  } else {
+    document.exitFullscreen && document.exitFullscreen();
+  }
+}
+
+/* ── LOG ── */
+function log(msg, type = 'info') {
+  const box = document.getElementById('log-box');
+  const now = new Date().toTimeString().slice(0,8);
+  const span = document.createElement('span');
+  span.className = 'log-entry ' + type;
+  span.textContent = `[${now}] ${msg}`;
+  box.appendChild(span);
+  box.appendChild(document.createElement('br'));
+  box.scrollTop = box.scrollHeight;
+}
+
+/* ── TOAST ── */
+function toast(msg, dur = 2200) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.classList.add('show');
+  setTimeout(() => el.classList.remove('show'), dur);
+}
+
+/* Prevent accidental movement release on mouseout */
+document.addEventListener('mouseup', () => {
+  // send stop to all axes just in case
+  if (CAM.connected) {
+    fetch(cgiUrl('decoder_control.cgi', {command:1}), {mode:'no-cors'}).catch(()=>{});
+  }
+});
+</script>
+</body>
+</html>
+
   font-size: 1.1rem;
   backdrop-filter: blur(4px);
   transition: background .12s, border-color .12s, transform .1s;

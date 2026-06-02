@@ -3,800 +3,905 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>NESSOS CAM-E59MB — Control Panel</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Barlow:wght@300;400;500;600;700&family=Barlow+Condensed:wght@400;600;700&display=swap" rel="stylesheet">
+<title>Nessos CAM-E59MB — Live Viewer</title>
 <style>
-:root {
-  --bg:       #07090f;
-  --surface:  #0c1018;
-  --surface2: #111722;
-  --border:   #1a2236;
-  --border2:  #243046;
-  --accent:   #00d4ff;
-  --accent2:  #ff5c35;
-  --ok:       #00e87a;
-  --warn:     #ffb930;
-  --text:     #d4e4f7;
-  --muted:    #3d526e;
-  --dimmed:   #7a96b8;
-  --mono:     'Share Tech Mono', monospace;
-  --sans:     'Barlow', sans-serif;
-  --cond:     'Barlow Condensed', sans-serif;
-}
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-html,body{height:100%;overflow:hidden}
-body{
-  background:var(--bg);
-  color:var(--text);
-  font-family:var(--sans);
-  display:flex;
-  flex-direction:column;
-  background-image:
-    radial-gradient(ellipse 60% 40% at 50% -10%, rgba(0,212,255,0.05) 0%, transparent 70%),
-    repeating-linear-gradient(0deg,transparent,transparent 59px,rgba(0,212,255,0.018) 59px,rgba(0,212,255,0.018) 60px),
-    repeating-linear-gradient(90deg,transparent,transparent 59px,rgba(0,212,255,0.018) 59px,rgba(0,212,255,0.018) 60px);
-}
+  @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Exo+2:wght@300;400;600;700&display=swap');
 
-/* ── HEADER ── */
-header{
-  display:flex;align-items:center;justify-content:space-between;
-  padding:0 20px;height:52px;
-  border-bottom:1px solid var(--border);
-  background:rgba(7,9,15,0.97);
-  flex-shrink:0;
-  position:relative;z-index:50;
-}
-.logo{display:flex;align-items:center;gap:14px}
-.logo-badge{
-  display:flex;align-items:center;gap:0;
-  border:1px solid var(--accent);
-  border-radius:4px;
-  overflow:hidden;
-}
-.logo-badge-left{
-  background:var(--accent);
-  padding:4px 9px;
-  font-family:var(--cond);
-  font-weight:700;font-size:.9rem;
-  color:#000;letter-spacing:.08em;
-  line-height:1;
-}
-.logo-badge-right{
-  padding:4px 9px;
-  font-family:var(--cond);
-  font-weight:600;font-size:.9rem;
-  color:var(--accent);letter-spacing:.06em;
-  line-height:1;
-}
-.logo-model{
-  font-family:var(--mono);
-  font-size:.65rem;color:var(--muted);letter-spacing:.1em;
-  line-height:1;
-}
-.logo-stack{display:flex;flex-direction:column;gap:3px}
+  :root {
+    --bg:       #0a0c10;
+    --panel:    #111520;
+    --border:   #1e2840;
+    --accent:   #00e5ff;
+    --accent2:  #ff4500;
+    --ok:       #00ff88;
+    --warn:     #ffcc00;
+    --text:     #c8d8f0;
+    --muted:    #4a5a7a;
+    --mono:     'Share Tech Mono', monospace;
+    --sans:     'Exo 2', sans-serif;
+  }
 
-.hdr-center{
-  position:absolute;left:50%;transform:translateX(-50%);
-  display:flex;align-items:center;gap:20px;
-}
-.hdr-stat{display:flex;flex-direction:column;align-items:center;gap:1px}
-.hdr-stat-val{font-family:var(--mono);font-size:.78rem;color:var(--text);line-height:1}
-.hdr-stat-lbl{font-size:.6rem;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;line-height:1}
-.hdr-div{width:1px;height:28px;background:var(--border)}
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-.hdr-right{display:flex;align-items:center;gap:12px}
-.status-pill{
-  display:flex;align-items:center;gap:7px;
-  padding:5px 12px;
-  border-radius:3px;
-  border:1px solid var(--border2);
-  background:var(--surface);
-  font-family:var(--mono);font-size:.68rem;letter-spacing:.04em;
-  cursor:default;
-}
-.dot{width:7px;height:7px;border-radius:50%;background:var(--muted);flex-shrink:0}
-.dot.live{background:var(--ok);box-shadow:0 0 8px var(--ok);animation:blink 1.8s infinite}
-.dot.error{background:var(--accent2);box-shadow:0 0 8px var(--accent2)}
-@keyframes blink{0%,100%{opacity:1}50%{opacity:.25}}
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background-image:
+      repeating-linear-gradient(0deg, transparent, transparent 39px, rgba(0,229,255,0.03) 39px, rgba(0,229,255,0.03) 40px),
+      repeating-linear-gradient(90deg, transparent, transparent 39px, rgba(0,229,255,0.03) 39px, rgba(0,229,255,0.03) 40px);
+  }
 
-.btn-hdr{
-  height:32px;padding:0 14px;
-  background:transparent;border:1px solid var(--border2);border-radius:3px;
-  color:var(--dimmed);font-family:var(--sans);font-size:.78rem;font-weight:500;
-  cursor:pointer;transition:all .15s;letter-spacing:.02em;
-}
-.btn-hdr:hover{border-color:var(--accent);color:var(--accent);background:rgba(0,212,255,.06)}
+  /* ── HEADER ── */
+  header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 28px;
+    border-bottom: 1px solid var(--border);
+    background: rgba(17,21,32,0.95);
+    backdrop-filter: blur(6px);
+    position: sticky; top: 0; z-index: 100;
+  }
+  .logo {
+    display: flex; align-items: center; gap: 12px;
+  }
+  .logo-icon {
+    width: 36px; height: 36px;
+    background: var(--accent);
+    border-radius: 50%;
+    display: grid; place-items: center;
+    box-shadow: 0 0 14px var(--accent);
+    flex-shrink: 0;
+  }
+  .logo-icon svg { width: 20px; height: 20px; fill: var(--bg); }
+  .logo-text { font-size: 1.1rem; font-weight: 700; letter-spacing: .08em; color: #fff; }
+  .logo-sub  { font-family: var(--mono); font-size: .68rem; color: var(--muted); }
+  .header-status { display: flex; align-items: center; gap: 8px; font-family: var(--mono); font-size: .75rem; }
+  .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--muted); animation: none; flex-shrink: 0; }
+  .dot.live { background: var(--ok); box-shadow: 0 0 8px var(--ok); animation: pulse 1.6s infinite; }
+  .dot.error { background: var(--accent2); box-shadow: 0 0 8px var(--accent2); }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.35} }
 
-/* ── MAIN ── */
-main{
-  flex:1;display:grid;
-  grid-template-columns:1fr 280px;
-  overflow:hidden;
-}
+  /* ── MAIN LAYOUT ── */
+  main {
+    flex: 1;
+    display: grid;
+    grid-template-columns: 1fr 320px;
+    gap: 0;
+  }
 
-/* ── VIDEO SECTION ── */
-.video-section{
-  display:flex;flex-direction:column;gap:0;
-  padding:16px 16px 16px 20px;
-  overflow:hidden;
-}
-.video-container{
-  position:relative;flex:1;min-height:0;
-  background:#000;
-  border:1px solid var(--border);
-  border-radius:6px;
-  overflow:hidden;
-}
-.video-container img#stream{
-  width:100%;height:100%;
-  object-fit:contain;display:block;
-}
-/* corner-bracket decoration */
-.corner{position:absolute;width:16px;height:16px;z-index:4;pointer-events:none}
-.corner.tl{top:8px;left:8px;border-top:2px solid var(--accent);border-left:2px solid var(--accent)}
-.corner.tr{top:8px;right:8px;border-top:2px solid var(--accent);border-right:2px solid var(--accent)}
-.corner.bl{bottom:8px;left:8px;border-bottom:2px solid var(--accent);border-left:2px solid var(--accent)}
-.corner.br{bottom:8px;right:8px;border-bottom:2px solid var(--accent);border-right:2px solid var(--accent)}
-/* scanlines */
-.video-container::after{
-  content:'';position:absolute;inset:0;z-index:3;
-  background:repeating-linear-gradient(0deg,transparent,transparent 3px,rgba(0,0,0,0.06) 3px,rgba(0,0,0,0.06) 4px);
-  pointer-events:none;
-}
-.overlay-info{
-  position:absolute;top:14px;left:14px;z-index:5;
-  font-family:var(--mono);font-size:.62rem;line-height:1.9;
-  color:rgba(0,212,255,.8);
-  text-shadow:0 0 10px rgba(0,212,255,.5);
-  pointer-events:none;
-}
-.overlay-rec{
-  position:absolute;top:12px;right:12px;z-index:5;
-  display:flex;align-items:center;gap:5px;
-  font-family:var(--mono);font-size:.6rem;color:var(--accent2);
-  pointer-events:none;
-}
-.rec-dot{width:5px;height:5px;border-radius:50%;background:var(--accent2);animation:blink 1s infinite}
+  /* ── VIDEO AREA ── */
+  .video-section {
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  .video-wrapper {
+    position: relative;
+    background: #000;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    overflow: hidden;
+    aspect-ratio: 4/3;
+    max-height: 68vh;
+  }
+  .video-wrapper img#stream {
+    width: 100%; height: 100%;
+    object-fit: contain;
+    display: block;
+  }
+  .overlay-corner {
+    position: absolute; top: 10px; left: 10px;
+    font-family: var(--mono); font-size: .7rem;
+    color: rgba(0,229,255,.7);
+    text-shadow: 0 0 6px var(--accent);
+    pointer-events: none;
+  }
+  .overlay-corner span { display: block; }
+  .video-placeholder {
+    position: absolute; inset: 0;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    gap: 12px; background: #000;
+    color: var(--muted); font-family: var(--mono); font-size: .85rem;
+  }
+  .video-placeholder svg { opacity: .25; }
 
-.placeholder{
-  position:absolute;inset:0;z-index:6;
-  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;
-  background:#000;color:var(--muted);font-family:var(--mono);font-size:.75rem;text-align:center;padding:20px;
-}
-.placeholder svg{opacity:.1}
-.placeholder .hint{color:var(--accent);font-size:.68rem;margin-top:4px}
-.placeholder .cam-url{font-size:.6rem;color:var(--border2);margin-top:8px;word-break:break-all;max-width:320px}
+  /* ── PTZ CONTROLS ── */
+  .ptz-bar {
+    display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+  }
+  .ptz-label { font-family: var(--mono); font-size: .7rem; color: var(--muted); white-space: nowrap; }
+  .ptz-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 40px);
+    grid-template-rows: repeat(3, 40px);
+    gap: 4px;
+  }
+  .ptz-btn {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    color: var(--accent);
+    cursor: pointer;
+    display: grid; place-items: center;
+    font-size: 1rem;
+    transition: background .15s, box-shadow .15s;
+    user-select: none;
+  }
+  .ptz-btn:hover { background: #1a2240; box-shadow: 0 0 8px rgba(0,229,255,.3); }
+  .ptz-btn:active { background: #0d1530; }
+  .ptz-center { font-size: .65rem; color: var(--muted); }
 
-/* bottom toolbar under video */
-.video-toolbar{
-  display:flex;align-items:center;gap:8px;
-  padding:10px 0 0;
-}
-.btn-tool{
-  height:30px;padding:0 12px;
-  background:var(--surface);border:1px solid var(--border2);border-radius:3px;
-  color:var(--dimmed);font-size:.73rem;font-family:var(--sans);font-weight:500;
-  cursor:pointer;transition:all .15s;white-space:nowrap;
-}
-.btn-tool:hover{border-color:var(--accent);color:var(--accent);background:rgba(0,212,255,.06)}
-.btn-tool.active{border-color:var(--accent);color:var(--accent);background:rgba(0,212,255,.12)}
-.btn-tool.danger{border-color:var(--border2);color:var(--accent2)}
-.btn-tool.danger:hover{border-color:var(--accent2);background:rgba(255,92,53,.08)}
-.spacer{flex:1}
-.quality-badge{
-  font-family:var(--mono);font-size:.62rem;color:var(--muted);
-  padding:0 8px;border-left:1px solid var(--border);
-}
+  .zoom-controls { display: flex; flex-direction: column; gap: 4px; }
+  .zoom-btn {
+    width: 40px; height: 40px;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    color: var(--warn);
+    cursor: pointer;
+    display: grid; place-items: center;
+    font-size: 1.1rem; font-weight: 700;
+    transition: background .15s;
+  }
+  .zoom-btn:hover { background: #1a2240; }
 
-/* ── RIGHT PANEL ── */
-.right-panel{
-  display:flex;flex-direction:column;
-  border-left:1px solid var(--border);
-  overflow-y:auto;overflow-x:hidden;
-  background:var(--surface);
-}
-.panel-section{
-  border-bottom:1px solid var(--border);
-  padding:14px 16px;
-}
-.panel-title{
-  font-family:var(--cond);font-size:.72rem;font-weight:600;
-  letter-spacing:.14em;text-transform:uppercase;
-  color:var(--muted);margin-bottom:12px;
-}
+  .snap-btn, .ir-btn, .patrol-btn {
+    padding: 8px 18px;
+    border-radius: 4px;
+    border: 1px solid;
+    font-family: var(--mono);
+    font-size: .78rem;
+    cursor: pointer;
+    transition: all .15s;
+  }
+  .snap-btn   { border-color: var(--accent); color: var(--accent); background: transparent; }
+  .snap-btn:hover { background: rgba(0,229,255,.12); }
+  .ir-btn     { border-color: var(--warn); color: var(--warn); background: transparent; }
+  .ir-btn:hover { background: rgba(255,204,0,.12); }
+  .patrol-btn { border-color: var(--ok); color: var(--ok); background: transparent; }
+  .patrol-btn:hover { background: rgba(0,255,136,.12); }
 
-/* ── PTZ CONTROL ── */
-.ptz-ring{
-  display:flex;flex-direction:column;align-items:center;gap:4px;
-  margin-bottom:12px;
-}
-.ptz-row{display:flex;gap:4px;align-items:center}
-.ptz-btn{
-  width:52px;height:44px;
-  background:var(--surface2);
-  border:1px solid var(--border2);border-radius:4px;
-  color:var(--dimmed);cursor:pointer;
-  display:grid;place-items:center;
-  transition:all .12s;font-size:1.2rem;
-  user-select:none;-webkit-user-select:none;
-}
-.ptz-btn:hover{background:rgba(0,212,255,.08);border-color:var(--accent);color:var(--accent)}
-.ptz-btn:active{background:rgba(0,212,255,.18);transform:scale(.94)}
-.ptz-center{
-  width:44px;height:44px;
-  background:var(--surface2);
-  border:1px solid var(--border2);border-radius:50%;
-  color:var(--dimmed);cursor:pointer;
-  display:grid;place-items:center;
-  transition:all .12s;font-size:.9rem;
-}
-.ptz-center:hover{background:rgba(0,212,255,.08);border-color:var(--accent);color:var(--accent)}
-.ptz-center:active{transform:scale(.94)}
-.ptz-arrow{width:0;height:0;display:block}
-.ptz-arrow.up{border-left:7px solid transparent;border-right:7px solid transparent;border-bottom:10px solid currentColor}
-.ptz-arrow.down{border-left:7px solid transparent;border-right:7px solid transparent;border-top:10px solid currentColor}
-.ptz-arrow.left{border-top:7px solid transparent;border-bottom:7px solid transparent;border-right:10px solid currentColor}
-.ptz-arrow.right{border-top:7px solid transparent;border-bottom:7px solid transparent;border-left:10px solid currentColor}
+  /* ── SIDEBAR ── */
+  .sidebar {
+    border-left: 1px solid var(--border);
+    padding: 24px 20px;
+    display: flex; flex-direction: column; gap: 20px;
+    overflow-y: auto;
+  }
 
-/* zoom + iris row */
-.ctrl-row{display:flex;gap:6px;margin-top:4px}
-.ctrl-group{flex:1;display:flex;flex-direction:column;gap:4px}
-.ctrl-label{font-family:var(--mono);font-size:.58rem;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;text-align:center}
-.ctrl-btns{display:flex;gap:3px}
-.ctrl-btn{
-  flex:1;height:32px;
-  background:var(--surface2);border:1px solid var(--border2);border-radius:3px;
-  color:var(--dimmed);cursor:pointer;font-size:.75rem;font-weight:600;
-  transition:all .12s;font-family:var(--sans);
-}
-.ctrl-btn:hover{background:rgba(0,212,255,.08);border-color:var(--accent);color:var(--accent)}
-.ctrl-btn:active{transform:scale(.94)}
+  .card {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 16px;
+  }
+  .card-title {
+    font-size: .7rem;
+    font-family: var(--mono);
+    color: var(--muted);
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+  }
 
-/* presets */
-.preset-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px}
-.preset-btn{
-  height:34px;
-  background:var(--surface2);border:1px solid var(--border2);border-radius:3px;
-  color:var(--dimmed);font-family:var(--mono);font-size:.68rem;
-  cursor:pointer;transition:all .12s;display:flex;align-items:center;justify-content:center;gap:6px;
-}
-.preset-btn:hover{background:rgba(0,212,255,.06);border-color:var(--border);color:var(--text)}
-.preset-btn.set-mode{border-color:var(--warn);color:var(--warn);background:rgba(255,185,48,.06)}
+  .form-row { margin-bottom: 12px; }
+  .form-row label { display: block; font-size: .72rem; color: var(--muted); margin-bottom: 4px; font-family: var(--mono); }
+  .form-row input, .form-row select {
+    width: 100%;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    color: var(--text);
+    padding: 7px 10px;
+    font-family: var(--mono);
+    font-size: .82rem;
+    outline: none;
+    transition: border-color .15s;
+  }
+  .form-row input:focus, .form-row select:focus { border-color: var(--accent); }
+  .form-row select option { background: var(--panel); }
 
-/* settings form */
-.form-row{display:flex;flex-direction:column;gap:4px;margin-bottom:10px}
-.form-row label{font-family:var(--mono);font-size:.62rem;color:var(--muted);letter-spacing:.06em}
-.form-row input{
-  height:32px;
-  background:var(--bg);border:1px solid var(--border2);border-radius:3px;
-  color:var(--text);font-family:var(--mono);font-size:.72rem;
-  padding:0 10px;width:100%;
-  outline:none;transition:border-color .15s;
-}
-.form-row input:focus{border-color:var(--accent)}
-.form-row input::placeholder{color:var(--muted)}
+  .btn-primary {
+    width: 100%;
+    padding: 10px;
+    background: var(--accent);
+    border: none; border-radius: 4px;
+    color: var(--bg);
+    font-family: var(--mono); font-size: .85rem; font-weight: 700;
+    cursor: pointer;
+    transition: opacity .15s, box-shadow .15s;
+    letter-spacing: .05em;
+  }
+  .btn-primary:hover { opacity: .88; box-shadow: 0 0 14px rgba(0,229,255,.45); }
 
-.btn-connect{
-  width:100%;height:34px;
-  background:var(--accent);border:none;border-radius:3px;
-  color:#000;font-family:var(--cond);font-size:.85rem;font-weight:700;
-  cursor:pointer;letter-spacing:.06em;text-transform:uppercase;
-  transition:all .15s;
-}
-.btn-connect:hover{background:#00f0ff;box-shadow:0 0 16px rgba(0,212,255,.35)}
-.btn-connect:active{transform:scale(.98)}
+  .btn-secondary {
+    width: 100%;
+    padding: 8px;
+    background: transparent;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    color: var(--muted);
+    font-family: var(--mono); font-size: .78rem;
+    cursor: pointer;
+    margin-top: 6px;
+    transition: border-color .15s, color .15s;
+  }
+  .btn-secondary:hover { border-color: var(--accent); color: var(--accent); }
 
-/* log */
-.log-box{
-  background:var(--bg);border:1px solid var(--border);border-radius:3px;
-  padding:8px;max-height:80px;overflow-y:auto;
-  font-family:var(--mono);font-size:.6rem;line-height:1.7;
-  color:var(--muted);
-}
-.log-entry{display:block}
-.log-entry.ok{color:var(--ok)}
-.log-entry.err{color:var(--accent2)}
-.log-entry.info{color:var(--accent)}
+  .info-row {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 5px 0;
+    border-bottom: 1px solid rgba(30,40,64,.5);
+    font-size: .75rem;
+  }
+  .info-row:last-child { border-bottom: none; }
+  .info-key { color: var(--muted); font-family: var(--mono); }
+  .info-val { color: var(--text); font-family: var(--mono); font-size: .73rem; }
+  .info-val.ok { color: var(--ok); }
+  .info-val.warn { color: var(--warn); }
 
-/* toast */
-#toast{
-  position:fixed;bottom:20px;left:50%;transform:translateX(-50%);
-  background:var(--surface2);border:1px solid var(--border2);border-radius:4px;
-  padding:8px 18px;font-family:var(--mono);font-size:.72rem;
-  color:var(--text);z-index:200;opacity:0;
-  transition:opacity .25s;pointer-events:none;white-space:nowrap;
-}
-#toast.show{opacity:1}
+  .log-box {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 8px 10px;
+    height: 120px;
+    overflow-y: auto;
+    font-family: var(--mono); font-size: .68rem;
+    line-height: 1.6;
+    color: var(--muted);
+  }
+  .log-box .log-ok   { color: var(--ok); }
+  .log-box .log-err  { color: var(--accent2); }
+  .log-box .log-info { color: var(--accent); }
+  .log-box .log-warn { color: var(--warn); }
 
-/* scrollbar */
-::-webkit-scrollbar{width:4px}
-::-webkit-scrollbar-track{background:transparent}
-::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px}
+  /* ── HELP SECTION ── */
+  .help-block {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--accent);
+    border-radius: 0 6px 6px 0;
+    padding: 14px 16px;
+    font-size: .78rem;
+    line-height: 1.7;
+    color: var(--text);
+  }
+  .help-block h3 { font-size: .8rem; color: var(--accent); margin-bottom: 8px; font-family: var(--mono); }
+  .help-block code {
+    background: var(--bg); border: 1px solid var(--border);
+    border-radius: 3px; padding: 1px 6px;
+    font-family: var(--mono); font-size: .76rem; color: var(--warn);
+  }
+  .help-block p { margin-bottom: 8px; }
+  .help-block ul { padding-left: 18px; }
+  .help-block li { margin-bottom: 4px; }
+
+  /* ── TABS ── */
+  .tabs { display: flex; gap: 0; border-bottom: 1px solid var(--border); margin-bottom: 14px; }
+  .tab-btn {
+    padding: 7px 14px;
+    background: transparent;
+    border: none;
+    font-family: var(--mono); font-size: .72rem; letter-spacing: .08em;
+    color: var(--muted); cursor: pointer;
+    border-bottom: 2px solid transparent;
+    transition: color .15s, border-color .15s;
+  }
+  .tab-btn.active { color: var(--accent); border-bottom-color: var(--accent); }
+
+  /* ── SNAPSHOTS ── */
+  .snapshots-grid {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 6px;
+  }
+  .snap-thumb {
+    aspect-ratio: 4/3;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    overflow: hidden;
+    cursor: pointer;
+    position: relative;
+  }
+  .snap-thumb img { width: 100%; height: 100%; object-fit: cover; }
+  .snap-thumb .snap-time {
+    position: absolute; bottom: 4px; left: 4px;
+    font-family: var(--mono); font-size: .58rem; color: #fff;
+    background: rgba(0,0,0,.65); padding: 1px 4px; border-radius: 2px;
+  }
+  .snap-empty { color: var(--muted); font-family: var(--mono); font-size: .72rem; text-align: center; padding: 20px 0; }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 860px) {
+    main { grid-template-columns: 1fr; }
+    .sidebar { border-left: none; border-top: 1px solid var(--border); }
+  }
+
+  /* ── SCROLLBAR ── */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+  /* scan line effect on video */
+  .video-wrapper::after {
+    content: '';
+    position: absolute; inset: 0;
+    background: repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(0,0,0,.08) 3px, rgba(0,0,0,.08) 4px);
+    pointer-events: none;
+  }
+
+  .help-btn {
+    background: transparent; border: none;
+    color: var(--muted); font-family: var(--mono); font-size: .72rem;
+    cursor: pointer; padding: 4px 0; text-decoration: underline;
+  }
+  .help-btn:hover { color: var(--accent); }
+
+  #help-panel { display: none; }
+  #help-panel.visible { display: block; }
 </style>
 </head>
 <body>
 
 <header>
   <div class="logo">
-    <div class="logo-badge">
-      <span class="logo-badge-left">NESSOS</span>
-      <span class="logo-badge-right">CAM</span>
+    <div class="logo-icon">
+      <svg viewBox="0 0 24 24"><path d="M17 10.5V7c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h12c.55 0 1-.45 1-1v-3.5l4 4v-11l-4 4z"/></svg>
     </div>
-    <div class="logo-stack">
-      <span class="logo-model">E59MB · IP CAMERA CONTROL</span>
-    </div>
-  </div>
-
-  <div class="hdr-center">
-    <div class="hdr-stat">
-      <span class="hdr-stat-val" id="hdr-ip">—</span>
-      <span class="hdr-stat-lbl">Address</span>
-    </div>
-    <div class="hdr-div"></div>
-    <div class="hdr-stat">
-      <span class="hdr-stat-val" id="hdr-time">—</span>
-      <span class="hdr-stat-lbl">Local Time</span>
-    </div>
-    <div class="hdr-div"></div>
-    <div class="hdr-stat">
-      <span class="hdr-stat-val" id="hdr-fps">— FPS</span>
-      <span class="hdr-stat-lbl">Refresh</span>
+    <div>
+      <div class="logo-text">NESSOS CAM-E59MB</div>
+      <div class="logo-sub">INDEPENDENT VIEWER — NO CLOUD REQUIRED</div>
     </div>
   </div>
-
-  <div class="hdr-right">
-    <div class="status-pill" id="status-pill">
-      <span class="dot" id="status-dot"></span>
-      <span id="status-text">OFFLINE</span>
-    </div>
-    <button class="btn-hdr" onclick="toggleFullscreen()">⛶ FULLSCREEN</button>
+  <div class="header-status">
+    <div class="dot" id="status-dot"></div>
+    <span id="status-text">OFFLINE</span>
   </div>
 </header>
 
 <main>
-  <!-- VIDEO -->
-  <div class="video-section">
-    <div class="video-container" id="videoContainer">
-      <!-- corner brackets -->
-      <div class="corner tl"></div><div class="corner tr"></div>
-      <div class="corner bl"></div><div class="corner br"></div>
 
-      <div class="overlay-info" id="overlayInfo">
-        IP: —<br>
-        <span id="tsLabel">—</span>
-      </div>
-      <div class="overlay-rec" id="overlayRec" style="display:none">
-        <span class="rec-dot"></span> LIVE
-      </div>
-
-      <div class="placeholder" id="placeholder">
-        <svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
-          <rect x="2" y="7" width="20" height="14" rx="2"/>
-          <path d="M16 3l-4 4-4-4"/>
-          <circle cx="12" cy="14" r="3"/>
+  <!-- VIDEO SECTION -->
+  <section class="video-section">
+    <div class="video-wrapper" id="video-wrapper">
+      <div class="video-placeholder" id="placeholder">
+        <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+          <rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/>
         </svg>
-        <span>CAMERA OFFLINE</span>
-        <span class="hint">Configure camera settings below and click CONNECT</span>
-        <span class="cam-url" id="urlPreview">—</span>
+        Configure the camera IP and credentials in the panel →
+      </div>
+      <img id="stream" src="" alt="" style="display:none;" crossorigin="anonymous">
+      <div class="overlay-corner" id="overlay" style="display:none;">
+        <span id="ov-name">CAM-E59MB</span>
+        <span id="ov-time"></span>
+        <span id="ov-fps">–</span>
+      </div>
+    </div>
+
+    <!-- PTZ BAR -->
+    <div class="ptz-bar">
+      <div class="ptz-label">PTZ CONTROL</div>
+      <div class="ptz-grid">
+        <div></div>
+        <button class="ptz-btn" onclick="ptzMove('up')"    title="Up">▲</button>
+        <div></div>
+        <button class="ptz-btn" onclick="ptzMove('left')"  title="Left">◀</button>
+        <button class="ptz-btn ptz-center" onclick="ptzMove('stop')" title="Stop">◼</button>
+        <button class="ptz-btn" onclick="ptzMove('right')" title="Right">▶</button>
+        <div></div>
+        <button class="ptz-btn" onclick="ptzMove('down')"  title="Down">▼</button>
+        <div></div>
+      </div>
+      <div class="zoom-controls">
+        <button class="zoom-btn" onclick="ptzZoom('in')"  title="Zoom In">＋</button>
+        <button class="zoom-btn" onclick="ptzZoom('out')" title="Zoom Out">－</button>
+      </div>
+      <button class="snap-btn"   onclick="takeSnapshot()">📷 SNAPSHOT</button>
+      <button class="ir-btn"     onclick="toggleIR()"    id="ir-btn">💡 IR AUTO</button>
+      <button class="patrol-btn" onclick="patrol()"      id="patrol-btn">↻ PATROL</button>
+    </div>
+  </section>
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+
+    <!-- CONNECTION CARD -->
+    <div class="card">
+      <div class="card-title">Camera Connection</div>
+
+      <div class="tabs">
+        <button class="tab-btn active" onclick="showTab('local',this)">Local</button>
+        <button class="tab-btn"        onclick="showTab('remote',this)">Remote / DDNS</button>
+        <button class="tab-btn"        onclick="showTab('rtsp',this)">RTSP</button>
       </div>
 
-      <img id="stream" src="" alt="Camera stream" style="display:none">
-    </div>
+      <div id="tab-local">
+        <div class="form-row">
+          <label>Camera Local IP</label>
+          <input type="text" id="cam-ip" placeholder="192.168.1.18" value="">
+        </div>
+        <div class="form-row">
+          <label>HTTP Port (default 88 or 13900)</label>
+          <input type="text" id="cam-port" placeholder="88" value="88">
+        </div>
+      </div>
 
-    <div class="video-toolbar">
-      <button class="btn-tool" onclick="takeSnapshot()">📷 SNAPSHOT</button>
-      <button class="btn-tool" id="btn-patrol" onclick="togglePatrol()">⟳ H-PATROL</button>
-      <button class="btn-tool" onclick="sendCmd(25)" title="Go to center/home position">⌂ HOME</button>
-      <span class="spacer"></span>
-      <button class="btn-tool danger" id="btn-disconnect" onclick="disconnect()" style="display:none">✕ DISCONNECT</button>
-      <span class="quality-badge" id="qualBadge">MJPEG · AUTO</span>
-    </div>
-  </div>
+      <div id="tab-remote" style="display:none">
+        <div class="form-row">
+          <label>Public IP or DDNS hostname</label>
+          <input type="text" id="cam-ip-remote" placeholder="myhome.ddns.net or 203.x.x.x" value="">
+        </div>
+        <div class="form-row">
+          <label>Forwarded HTTP Port</label>
+          <input type="text" id="cam-port-remote" placeholder="8088" value="8088">
+        </div>
+        <div class="help-block" style="font-size:.72rem; padding: 10px 12px; margin-bottom: 10px;">
+          ⚠️ For internet access, you must port-forward the camera's HTTP port on your router to the camera's local IP. Example: external port <code>8088</code> → <code>192.168.1.18:88</code>.
+        </div>
+      </div>
 
-  <!-- RIGHT PANEL -->
-  <div class="right-panel">
+      <div id="tab-rtsp" style="display:none">
+        <div class="form-row">
+          <label>RTSP URL (requires a proxy — see guide)</label>
+          <input type="text" id="rtsp-url" placeholder="rtsp://admin:pass@192.168.1.18:554/videoMain" value="">
+        </div>
+        <div class="help-block" style="font-size:.72rem; padding: 10px 12px; margin-bottom: 10px;">
+          Browsers cannot play RTSP directly. Use <code>ffmpeg</code> or a relay like <strong>rtsp-simple-server</strong> to convert to HLS, then enter the HLS URL here.
+        </div>
+      </div>
 
-    <!-- CONNECTION -->
-    <div class="panel-section">
-      <div class="panel-title">Connection</div>
       <div class="form-row">
-        <label>IP ADDRESS : PORT</label>
-        <input type="text" id="inp-ip" value="192.168.100.155:13900" placeholder="192.168.100.155:13900">
+        <label>Username</label>
+        <input type="text" id="cam-user" placeholder="admin" value="admin">
       </div>
       <div class="form-row">
-        <label>USERNAME</label>
-        <input type="text" id="inp-user" value="admin" placeholder="admin">
+        <label>Password</label>
+        <input type="password" id="cam-pass" placeholder="(leave empty if none)" value="">
       </div>
       <div class="form-row">
-        <label>PASSWORD</label>
-        <input type="password" id="inp-pwd" value="" placeholder="(leave blank if none)">
+        <label>Stream Type</label>
+        <select id="stream-type">
+          <option value="mjpeg">MJPEG — /videostream.cgi</option>
+          <option value="snapshot">Snapshot poll (fallback)</option>
+          <option value="hls">HLS URL (RTSP relay)</option>
+        </select>
       </div>
-      <button class="btn-connect" id="btn-connect" onclick="connect()">CONNECT</button>
+
+      <button class="btn-primary" onclick="connect()">▶ CONNECT</button>
+      <button class="btn-secondary" onclick="disconnect()">■ DISCONNECT</button>
     </div>
 
-    <!-- PTZ CONTROL -->
-    <div class="panel-section">
-      <div class="panel-title">PTZ Control</div>
-      <div class="ptz-ring">
-        <div class="ptz-row">
-          <div style="width:52px"></div>
-          <button class="ptz-btn" id="ptz-up"
-            onmousedown="startMove(2)" onmouseup="stopMove(3)"
-            ontouchstart="startMove(2)" ontouchend="stopMove(3)">
-            <span class="ptz-arrow up"></span>
-          </button>
-          <div style="width:52px"></div>
-        </div>
-        <div class="ptz-row">
-          <button class="ptz-btn" id="ptz-left"
-            onmousedown="startMove(6)" onmouseup="stopMove(7)"
-            ontouchstart="startMove(6)" ontouchend="stopMove(7)">
-            <span class="ptz-arrow left"></span>
-          </button>
-          <button class="ptz-center" onclick="sendCmd(25)" title="Home / Center">⌂</button>
-          <button class="ptz-btn" id="ptz-right"
-            onmousedown="startMove(4)" onmouseup="stopMove(5)"
-            ontouchstart="startMove(4)" ontouchend="stopMove(5)">
-            <span class="ptz-arrow right"></span>
-          </button>
-        </div>
-        <div class="ptz-row">
-          <div style="width:52px"></div>
-          <button class="ptz-btn" id="ptz-down"
-            onmousedown="startMove(0)" onmouseup="stopMove(1)"
-            ontouchstart="startMove(0)" ontouchend="stopMove(1)">
-            <span class="ptz-arrow down"></span>
-          </button>
-          <div style="width:52px"></div>
-        </div>
-      </div>
+    <!-- STATUS CARD -->
+    <div class="card">
+      <div class="card-title">Status</div>
+      <div class="info-row"><span class="info-key">Connection</span><span class="info-val" id="s-conn">—</span></div>
+      <div class="info-row"><span class="info-key">Stream URL</span><span class="info-val" id="s-url" style="font-size:.65rem;word-break:break-all;">—</span></div>
+      <div class="info-row"><span class="info-key">Camera Model</span><span class="info-val ok">CAM-E59MB (Foscam API)</span></div>
+      <div class="info-row"><span class="info-key">Compression</span><span class="info-val">MJPEG</span></div>
+      <div class="info-row"><span class="info-key">Max Resolution</span><span class="info-val">640×480 VGA</span></div>
+      <div class="info-row"><span class="info-key">Night Vision</span><span class="info-val">22 LED IR (15m)</span></div>
+      <div class="info-row"><span class="info-key">Frame Rate</span><span class="info-val" id="s-fps">—</span></div>
+    </div>
 
-      <!-- Diagonal -->
-      <div class="ctrl-row" style="margin-bottom:10px">
-        <button class="ctrl-btn" onmousedown="startMove(92)" onmouseup="stopMove(1)" title="↙ Left-Down">↙</button>
-        <button class="ctrl-btn" onmousedown="startMove(90)" onmouseup="stopMove(1)" title="↖ Left-Up">↖</button>
-        <button class="ctrl-btn" onmousedown="startMove(91)" onmouseup="stopMove(1)" title="↗ Right-Up">↗</button>
-        <button class="ctrl-btn" onmousedown="startMove(93)" onmouseup="stopMove(1)" title="↘ Right-Down">↘</button>
+    <!-- SNAPSHOTS CARD -->
+    <div class="card">
+      <div class="card-title">Snapshots</div>
+      <div class="snapshots-grid" id="snap-grid">
+        <div class="snap-empty" style="grid-column:1/-1;">No snapshots yet</div>
       </div>
+    </div>
 
-      <div class="ctrl-row">
-        <div class="ctrl-group">
-          <span class="ctrl-label">Zoom</span>
-          <div class="ctrl-btns">
-            <button class="ctrl-btn"
-              onmousedown="startMove(18)" onmouseup="stopMove(19)" title="Zoom In">＋</button>
-            <button class="ctrl-btn"
-              onmousedown="startMove(16)" onmouseup="stopMove(17)" title="Zoom Out">－</button>
-          </div>
-        </div>
-        <div class="ctrl-group">
-          <span class="ctrl-label">Focus</span>
-          <div class="ctrl-btns">
-            <button class="ctrl-btn"
-              onmousedown="startMove(34)" onmouseup="stopMove(35)" title="Focus +">＋</button>
-            <button class="ctrl-btn"
-              onmousedown="startMove(36)" onmouseup="stopMove(37)" title="Focus -">－</button>
-          </div>
-        </div>
-        <div class="ctrl-group">
-          <span class="ctrl-label">Iris</span>
-          <div class="ctrl-btns">
-            <button class="ctrl-btn"
-              onmousedown="startMove(40)" onmouseup="stopMove(41)" title="Iris Open">＋</button>
-            <button class="ctrl-btn"
-              onmousedown="startMove(42)" onmouseup="stopMove(43)" title="Iris Close">－</button>
-          </div>
-        </div>
+    <!-- LOG CARD -->
+    <div class="card">
+      <div class="card-title">Event Log</div>
+      <div class="log-box" id="log"></div>
+    </div>
+
+    <!-- HELP CARD -->
+    <div class="card">
+      <div class="card-title">
+        Setup Guide
+        <button class="help-btn" onclick="toggleHelp()" id="help-toggle" style="float:right">show ▼</button>
       </div>
-
-      <!-- Speed -->
-      <div class="form-row" style="margin-top:10px;gap:6px">
-        <label>MOVE SPEED (0–100)</label>
-        <div style="display:flex;align-items:center;gap:8px">
-          <input type="range" id="speed-range" min="0" max="100" value="30"
-            style="flex:1;height:4px;accent-color:var(--accent)">
-          <span style="font-family:var(--mono);font-size:.72rem;color:var(--text);min-width:28px;text-align:right" id="speed-val">30</span>
+      <div id="help-panel">
+        <div class="help-block">
+          <h3>Step 1 — Find the Camera IP</h3>
+          <p>Connect the camera via Ethernet RJ-45. Open your router admin page and look for a new device. The camera uses DHCP. Note its IP address (e.g. <code>192.168.1.18</code>) and port (default <code>88</code> or sometimes <code>13900</code>).</p>
+          <h3>Step 2 — Access Web Interface Directly</h3>
+          <p>Open a browser and go to:<br><code>http://192.168.1.18:88</code><br>Login: <code>admin</code> / no password (or whatever you set). This is the Foscam CGI web UI.</p>
+          <h3>Step 3 — Stream URL</h3>
+          <p>The MJPEG stream URL is:<br>
+          <code>http://IP:PORT/videostream.cgi?user=admin&pwd=</code><br>
+          Snapshot URL:<br>
+          <code>http://IP:PORT/snapshot.cgi?user=admin&pwd=</code></p>
+          <h3>Step 4 — Remote Access (Internet)</h3>
+          <ul>
+            <li>On your router: Port Forward external port <code>8088</code> → <code>192.168.1.18:88</code></li>
+            <li>Use a free DDNS service (No-IP, DuckDNS) if you don't have a static IP</li>
+            <li>Enter your public IP/DDNS + forwarded port in the "Remote" tab above</li>
+          </ul>
+          <h3>Step 5 — PTZ & IR Control</h3>
+          <p>This viewer sends Foscam CGI commands directly to the camera. PTZ, zoom, IR toggle and horizontal patrol all use the <code>/decoder_control.cgi</code> and <code>/set_misc.cgi</code> endpoints.</p>
+          <h3>Browser CORS Note</h3>
+          <p>If the stream shows a CORS error, host this HTML file on the same network as the camera, or use a simple local web server (<code>python3 -m http.server 8080</code>). Alternatively, enable CORS on your router/reverse proxy.</p>
         </div>
       </div>
     </div>
 
-    <!-- PRESETS -->
-    <div class="panel-section">
-      <div class="panel-title">Presets</div>
-      <div class="preset-grid" id="preset-grid">
-        <!-- filled by JS -->
-      </div>
-      <div style="display:flex;gap:6px;margin-top:8px">
-        <button class="ctrl-btn" onclick="toggleSetMode()" id="btn-setmode"
-          style="height:30px;font-size:.68rem;font-family:var(--mono)">SET MODE</button>
-        <button class="ctrl-btn" onclick="sendCmd(25)"
-          style="height:30px;font-size:.68rem;font-family:var(--mono)">HOME</button>
-      </div>
-    </div>
-
-    <!-- LOG -->
-    <div class="panel-section">
-      <div class="panel-title">Activity Log</div>
-      <div class="log-box" id="log-box"></div>
-    </div>
-
-  </div>
+  </aside>
 </main>
 
-<div id="toast"></div>
-
 <script>
-const CAM = {
-  ip: '192.168.100.155:13900',
-  user: 'admin',
-  pwd: '',
+// ─── STATE ──────────────────────────────────────────────────────────────────
+let state = {
   connected: false,
-  patrolling: false,
-  settingPreset: false,
-  streamTimer: null,
-  clockTimer: null,
-  frameCount: 0,
+  baseUrl: '',
+  user: 'admin',
+  pass: '',
+  streamType: 'mjpeg',
+  irMode: 0,       // 0=auto, 1=on, 2=off
+  patrolOn: false,
+  snapshotCount: 0,
   fpsTimer: null,
+  fpsFrames: 0,
+  lastFps: '–',
+  activeTab: 'local',
+  pollTimer: null,
+  pollIndex: 0
 };
 
-const PRESETS = [
-  {id:0,label:'PRESET 1'},{id:1,label:'PRESET 2'},
-  {id:2,label:'PRESET 3'},{id:3,label:'PRESET 4'},
-  {id:4,label:'PRESET 5'},{id:5,label:'PRESET 6'},
-];
-
-/* ── INIT ── */
-document.getElementById('inp-ip').addEventListener('input', updateUrlPreview);
-document.getElementById('inp-user').addEventListener('input', updateUrlPreview);
-document.getElementById('inp-pwd').addEventListener('input', updateUrlPreview);
-document.getElementById('speed-range').addEventListener('input', function(){
-  document.getElementById('speed-val').textContent = this.value;
-});
-document.addEventListener('contextmenu', e => e.preventDefault());
-buildPresets();
-updateUrlPreview();
-startClock();
-
-function buildPresets() {
-  const grid = document.getElementById('preset-grid');
-  grid.innerHTML = '';
-  PRESETS.forEach(p => {
-    const btn = document.createElement('button');
-    btn.className = 'preset-btn';
-    btn.id = 'preset-' + p.id;
-    btn.textContent = p.label;
-    btn.onclick = () => gotoOrSetPreset(p.id);
-    grid.appendChild(btn);
-  });
-}
-
-function updateUrlPreview() {
-  const ip = document.getElementById('inp-ip').value.trim();
-  const user = document.getElementById('inp-user').value.trim();
-  const url = `http://${ip}/videostream.cgi?user=${user}&pwd=***`;
-  document.getElementById('urlPreview').textContent = url;
-  document.getElementById('hdr-ip').textContent = ip;
-}
-
-function startClock() {
-  function tick() {
-    const now = new Date();
-    const t = now.toTimeString().slice(0,8);
-    document.getElementById('hdr-time').textContent = t;
-    document.getElementById('tsLabel').textContent = now.toLocaleDateString() + '  ' + t;
-  }
-  tick();
-  CAM.clockTimer = setInterval(tick, 1000);
-}
-
-/* ── CONNECT / DISCONNECT ── */
-function connect() {
-  CAM.ip   = document.getElementById('inp-ip').value.trim();
-  CAM.user = document.getElementById('inp-user').value.trim();
-  CAM.pwd  = document.getElementById('inp-pwd').value;
-
-  const streamUrl = `http://${CAM.ip}/videostream.cgi?user=${CAM.user}&pwd=${CAM.pwd}`;
-  const img = document.getElementById('stream');
-  img.src = streamUrl;
-
-  img.onload = () => {
-    document.getElementById('placeholder').style.display = 'none';
-    img.style.display = 'block';
-    setConnected(true);
-    log('Stream connected: ' + CAM.ip, 'ok');
-  };
-  img.onerror = () => {
-    // Try snapshot fallback
-    trySnapshotMode();
-  };
-
-  document.getElementById('overlayInfo').innerHTML =
-    `IP: ${CAM.ip}<br><span id="tsLabel">—</span>`;
-
-  log('Connecting to ' + CAM.ip + ' …', 'info');
-  setStatus('CONNECTING', false);
-}
-
-function trySnapshotMode() {
-  // Fallback: refresh snapshot every 500ms
-  const snapUrl = `http://${CAM.ip}/snapshot.cgi?user=${CAM.user}&pwd=${CAM.pwd}`;
-  const img = document.getElementById('stream');
-
-  let ok = false;
-  const testImg = new Image();
-  testImg.onload = () => {
-    ok = true;
-    document.getElementById('placeholder').style.display = 'none';
-    img.style.display = 'block';
-    setConnected(true);
-    log('Snapshot mode active (MJPEG fallback)', 'ok');
-    document.getElementById('qualBadge').textContent = 'SNAPSHOT · 2 FPS';
-    // refresh loop
-    CAM.streamTimer = setInterval(() => {
-      img.src = snapUrl + '&t=' + Date.now();
-    }, 500);
-  };
-  testImg.onerror = () => {
-    setStatus('ERROR', true);
-    setConnected(false);
-    log('Connection failed — check IP, credentials, and CORS', 'err');
-    toast('Connection failed. Check browser console for details.');
-  };
-  testImg.src = snapUrl + '&t=' + Date.now();
-}
-
-function disconnect() {
-  clearInterval(CAM.streamTimer);
-  const img = document.getElementById('stream');
-  img.src = '';
-  img.style.display = 'none';
-  document.getElementById('placeholder').style.display = 'flex';
-  setConnected(false);
-  log('Disconnected', 'info');
-  toast('Camera disconnected');
-}
-
-function setConnected(on) {
-  CAM.connected = on;
-  setStatus(on ? 'LIVE' : 'OFFLINE', !on);
-  document.getElementById('overlayRec').style.display = on ? 'flex' : 'none';
-  document.getElementById('btn-disconnect').style.display = on ? '' : 'none';
-  document.getElementById('btn-connect').textContent = on ? 'RECONNECT' : 'CONNECT';
-}
-
-function setStatus(txt, isError) {
-  const dot = document.getElementById('status-dot');
-  const label = document.getElementById('status-text');
-  dot.className = 'dot' + (txt === 'LIVE' ? ' live' : isError ? ' error' : '');
-  label.textContent = txt;
-}
-
-/* ── CGI COMMANDS ── */
-function cgiUrl(path, params = {}) {
-  let url = `http://${CAM.ip}/${path}?user=${CAM.user}&pwd=${CAM.pwd}`;
-  for (const [k, v] of Object.entries(params)) url += `&${k}=${v}`;
-  return url;
-}
-
-function sendCmd(cmd, extra = {}) {
-  if (!CAM.connected) { toast('Camera not connected'); return; }
-  const speed = parseInt(document.getElementById('speed-range').value);
-  const url = cgiUrl('decoder_control.cgi', { command: cmd, onestep: 0, ...extra });
-  fetch(url, { mode: 'no-cors' })
-    .then(() => log(`CMD ${cmd} sent`, 'ok'))
-    .catch(() => log(`CMD ${cmd} failed`, 'err'));
-}
-
-function startMove(cmd) {
-  if (!CAM.connected) { toast('Camera not connected'); return; }
-  const speed = parseInt(document.getElementById('speed-range').value);
-  const url = cgiUrl('decoder_control.cgi', { command: cmd, onestep: 0, speed });
-  fetch(url, { mode: 'no-cors' }).catch(() => {});
-  log(`PTZ move cmd=${cmd}`, 'ok');
-}
-
-function stopMove(cmd) {
-  if (!CAM.connected) return;
-  const url = cgiUrl('decoder_control.cgi', { command: cmd });
-  fetch(url, { mode: 'no-cors' }).catch(() => {});
-}
-
-/* ── PRESETS ── */
-function gotoOrSetPreset(id) {
-  if (!CAM.connected) { toast('Camera not connected'); return; }
-  if (CAM.settingPreset) {
-    const setCmd = 30 + (id * 2);
-    sendCmd(setCmd);
-    log(`Preset ${id+1} saved`, 'ok');
-    toast(`Preset ${id+1} saved`);
-    toggleSetMode(false);
-  } else {
-    const goCmd = 31 + (id * 2);
-    sendCmd(goCmd);
-    log(`Go to preset ${id+1}`, 'info');
-  }
-}
-
-function toggleSetMode(force) {
-  CAM.settingPreset = force !== undefined ? force : !CAM.settingPreset;
-  const btn = document.getElementById('btn-setmode');
-  const btns = document.querySelectorAll('.preset-btn');
-  if (CAM.settingPreset) {
-    btn.style.borderColor = 'var(--warn)';
-    btn.style.color = 'var(--warn)';
-    btn.textContent = '✕ CANCEL';
-    btns.forEach(b => b.classList.add('set-mode'));
-    toast('Click a preset slot to save current position');
-  } else {
-    btn.style.borderColor = '';btn.style.color = '';
-    btn.textContent = 'SET MODE';
-    btns.forEach(b => b.classList.remove('set-mode'));
-  }
-}
-
-/* ── PATROL ── */
-function togglePatrol() {
-  if (!CAM.connected) { toast('Camera not connected'); return; }
-  CAM.patrolling = !CAM.patrolling;
-  const cmd = CAM.patrolling ? 28 : 29;
-  sendCmd(cmd);
-  const btn = document.getElementById('btn-patrol');
-  btn.classList.toggle('active', CAM.patrolling);
-  btn.textContent = CAM.patrolling ? '⏹ STOP PATROL' : '⟳ H-PATROL';
-  log(CAM.patrolling ? 'H-Patrol started' : 'Patrol stopped', 'info');
-}
-
-/* ── SNAPSHOT ── */
-function takeSnapshot() {
-  if (!CAM.connected) { toast('Camera not connected'); return; }
-  const url = cgiUrl('snapshot.cgi');
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = `nessos_snap_${Date.now()}.jpg`;
-  a.target = '_blank';
-  a.click();
-  log('Snapshot captured', 'ok');
-  toast('Snapshot saved');
-}
-
-/* ── FULLSCREEN ── */
-function toggleFullscreen() {
-  const vc = document.getElementById('videoContainer');
-  if (!document.fullscreenElement) {
-    vc.requestFullscreen && vc.requestFullscreen();
-  } else {
-    document.exitFullscreen && document.exitFullscreen();
-  }
-}
-
-/* ── LOG ── */
-function log(msg, type = 'info') {
-  const box = document.getElementById('log-box');
-  const now = new Date().toTimeString().slice(0,8);
-  const span = document.createElement('span');
-  span.className = 'log-entry ' + type;
-  span.textContent = `[${now}] ${msg}`;
-  box.appendChild(span);
-  box.appendChild(document.createElement('br'));
+// ─── LOGGING ────────────────────────────────────────────────────────────────
+function log(msg, type='info') {
+  const box = document.getElementById('log');
+  const d = new Date();
+  const ts = d.toTimeString().slice(0,8);
+  const el = document.createElement('div');
+  el.className = `log-${type}`;
+  el.textContent = `[${ts}] ${msg}`;
+  box.appendChild(el);
   box.scrollTop = box.scrollHeight;
+  if (box.children.length > 80) box.removeChild(box.children[0]);
 }
 
-/* ── TOAST ── */
-function toast(msg, dur = 2200) {
-  const el = document.getElementById('toast');
-  el.textContent = msg;
-  el.classList.add('show');
-  setTimeout(() => el.classList.remove('show'), dur);
+// ─── OVERLAY CLOCK ──────────────────────────────────────────────────────────
+setInterval(() => {
+  const d = new Date();
+  document.getElementById('ov-time').textContent = d.toLocaleString();
+  document.getElementById('ov-fps').textContent = `FPS: ${state.lastFps}`;
+}, 1000);
+
+// ─── TABS ────────────────────────────────────────────────────────────────────
+function showTab(tab, btn) {
+  ['local','remote','rtsp'].forEach(t => {
+    document.getElementById(`tab-${t}`).style.display = t === tab ? '' : 'none';
+  });
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  state.activeTab = tab;
 }
 
-/* Prevent accidental movement release on mouseout */
-document.addEventListener('mouseup', () => {
-  // send stop to all axes just in case
-  if (CAM.connected) {
-    fetch(cgiUrl('decoder_control.cgi', {command:1}), {mode:'no-cors'}).catch(()=>{});
+function toggleHelp() {
+  const p = document.getElementById('help-panel');
+  const b = document.getElementById('help-toggle');
+  p.classList.toggle('visible');
+  b.textContent = p.classList.contains('visible') ? 'hide ▲' : 'show ▼';
+}
+
+// ─── BUILD BASE URL ──────────────────────────────────────────────────────────
+function buildBaseUrl() {
+  const user = document.getElementById('cam-user').value.trim();
+  const pass  = document.getElementById('cam-pass').value;
+  state.user = user;
+  state.pass = pass;
+  state.streamType = document.getElementById('stream-type').value;
+
+  if (state.activeTab === 'local') {
+    const ip   = document.getElementById('cam-ip').value.trim();
+    const port = document.getElementById('cam-port').value.trim() || '88';
+    if (!ip) { alert('Enter the camera IP address.'); return null; }
+    return `http://${ip}:${port}`;
+  } else if (state.activeTab === 'remote') {
+    const ip   = document.getElementById('cam-ip-remote').value.trim();
+    const port = document.getElementById('cam-port-remote').value.trim() || '8088';
+    if (!ip) { alert('Enter a public IP or DDNS hostname.'); return null; }
+    return `http://${ip}:${port}`;
+  } else {
+    // RTSP tab — user provides HLS URL directly
+    const url = document.getElementById('rtsp-url').value.trim();
+    if (!url) { alert('Enter an HLS URL converted from RTSP.'); return null; }
+    return url;
   }
-});
+}
+
+// ─── CONNECT ─────────────────────────────────────────────────────────────────
+function connect() {
+  const base = buildBaseUrl();
+  if (!base) return;
+  state.baseUrl = base;
+  disconnect(); // clean up previous
+
+  log(`Connecting to ${base} …`, 'info');
+
+  const streamImg  = document.getElementById('stream');
+  const placeholder = document.getElementById('placeholder');
+  const overlay    = document.getElementById('overlay');
+
+  if (state.streamType === 'mjpeg') {
+    // Foscam MJPEG stream endpoint
+    const url = `${base}/videostream.cgi?user=${encodeURIComponent(state.user)}&pwd=${encodeURIComponent(state.pass)}&resolution=8&rate=0`;
+    document.getElementById('s-url').textContent = url;
+    streamImg.src = url;
+    streamImg.style.display = 'block';
+    placeholder.style.display = 'none';
+    overlay.style.display = 'block';
+    state.connected = true;
+
+    streamImg.onload = () => {
+      setStatus('live');
+      log('MJPEG stream connected.', 'ok');
+      startFpsCounter();
+    };
+    streamImg.onerror = () => {
+      log('Stream error — check IP, port, credentials.', 'err');
+      setStatus('error');
+      // Fallback: try snapshot poll
+      log('Falling back to snapshot polling…', 'warn');
+      startSnapshotPoll(base);
+    };
+  } else if (state.streamType === 'snapshot') {
+    placeholder.style.display = 'none';
+    streamImg.style.display = 'block';
+    overlay.style.display = 'block';
+    startSnapshotPoll(base);
+  } else if (state.streamType === 'hls') {
+    // HLS via <video> tag
+    loadHLS(base);
+  }
+}
+
+// ─── SNAPSHOT POLL (fallback) ────────────────────────────────────────────────
+function startSnapshotPoll(base) {
+  clearInterval(state.pollTimer);
+  const streamImg = document.getElementById('stream');
+  let t0 = Date.now(); let frames = 0;
+  state.pollTimer = setInterval(() => {
+    const url = `${base}/snapshot.cgi?user=${encodeURIComponent(state.user)}&pwd=${encodeURIComponent(state.pass)}&t=${Date.now()}`;
+    streamImg.src = url;
+    frames++;
+    const dt = (Date.now() - t0) / 1000;
+    state.lastFps = (frames / dt).toFixed(1);
+    document.getElementById('s-fps').textContent = `${state.lastFps} fps`;
+  }, 300);
+  setStatus('live');
+  log('Snapshot polling started (≈3 fps).', 'ok');
+  document.getElementById('s-url').textContent = `${base}/snapshot.cgi (polling)`;
+}
+
+// ─── HLS ─────────────────────────────────────────────────────────────────────
+function loadHLS(url) {
+  // Replace img with video element
+  const wrapper = document.getElementById('video-wrapper');
+  let vid = document.getElementById('hls-video');
+  if (!vid) {
+    vid = document.createElement('video');
+    vid.id = 'hls-video';
+    vid.style = 'width:100%;height:100%;object-fit:contain;background:#000;';
+    vid.controls = true; vid.autoplay = true; vid.muted = true;
+    wrapper.appendChild(vid);
+  }
+  if (window.Hls && Hls.isSupported()) {
+    const hls = new Hls();
+    hls.loadSource(url);
+    hls.attachMedia(vid);
+    hls.on(Hls.Events.MANIFEST_PARSED, () => { vid.play(); setStatus('live'); log('HLS stream started.', 'ok'); });
+  } else if (vid.canPlayType('application/vnd.apple.mpegurl')) {
+    vid.src = url;
+    vid.play(); setStatus('live'); log('HLS (native) stream started.', 'ok');
+  } else {
+    log('HLS not supported in this browser. Use MJPEG or snapshot mode.', 'err');
+  }
+  document.getElementById('placeholder').style.display = 'none';
+  document.getElementById('overlay').style.display = 'block';
+  state.connected = true;
+}
+
+// ─── DISCONNECT ──────────────────────────────────────────────────────────────
+function disconnect() {
+  clearInterval(state.pollTimer);
+  clearInterval(state.fpsTimer);
+  state.connected = false;
+  state.patrolOn = false;
+  document.getElementById('patrol-btn').textContent = '↻ PATROL';
+  const img = document.getElementById('stream');
+  img.src = ''; img.style.display = 'none';
+  document.getElementById('placeholder').style.display = 'flex';
+  document.getElementById('overlay').style.display = 'none';
+  const vid = document.getElementById('hls-video');
+  if (vid) { vid.src = ''; }
+  setStatus('offline');
+  document.getElementById('s-conn').textContent = 'Disconnected';
+  document.getElementById('s-fps').textContent = '—';
+  state.lastFps = '–';
+  if (document.getElementById('s-url').textContent !== '—') {
+    log('Disconnected.', 'warn');
+  }
+}
+
+// ─── STATUS ──────────────────────────────────────────────────────────────────
+function setStatus(s) {
+  const dot  = document.getElementById('status-dot');
+  const txt  = document.getElementById('status-text');
+  const conn = document.getElementById('s-conn');
+  dot.className = `dot ${s}`;
+  if (s === 'live')    { txt.textContent = 'LIVE';       conn.textContent = 'Live'; conn.className = 'info-val ok'; }
+  else if (s === 'error') { txt.textContent = 'ERROR';   conn.textContent = 'Error'; conn.className = 'info-val warn'; }
+  else                 { txt.textContent = 'OFFLINE';    conn.textContent = 'Offline'; conn.className = 'info-val'; }
+}
+
+// ─── FPS COUNTER (MJPEG) ────────────────────────────────────────────────────
+function startFpsCounter() {
+  clearInterval(state.fpsTimer);
+  let last = Date.now(); let frames = 0;
+  const img = document.getElementById('stream');
+  const countFrame = () => {
+    frames++;
+    const now = Date.now();
+    if (now - last >= 2000) {
+      state.lastFps = (frames / ((now - last) / 1000)).toFixed(1);
+      document.getElementById('s-fps').textContent = `${state.lastFps} fps`;
+      frames = 0; last = now;
+    }
+  };
+  img.addEventListener('load', countFrame);
+}
+
+// ─── CGI COMMAND HELPER ──────────────────────────────────────────────────────
+function cgiCmd(endpoint, params) {
+  if (!state.baseUrl) { log('Not connected.', 'warn'); return; }
+  const qs = new URLSearchParams({ user: state.user, pwd: state.pass, ...params });
+  const url = `${state.baseUrl}/${endpoint}?${qs}`;
+  fetch(url, { mode: 'no-cors' })
+    .then(() => log(`CMD: ${endpoint} ${JSON.stringify(params)}`, 'info'))
+    .catch(e => log(`CMD error: ${e.message}`, 'err'));
+}
+
+// ─── PTZ ─────────────────────────────────────────────────────────────────────
+const PTZ_CMDS = { up: 0, upstop: 1, down: 2, downstop: 3, left: 6, leftstop: 7, right: 4, rightstop: 5, stop: 1 };
+function ptzMove(dir) {
+  if (dir === 'stop') {
+    ['upstop','downstop','leftstop','rightstop'].forEach(d => cgiCmd('decoder_control.cgi', { command: PTZ_CMDS[d] }));
+    log('PTZ: stop', 'info');
+    return;
+  }
+  cgiCmd('decoder_control.cgi', { command: PTZ_CMDS[dir] });
+  setTimeout(() => cgiCmd('decoder_control.cgi', { command: PTZ_CMDS[dir + 'stop'] || 1 }), 600);
+  log(`PTZ: ${dir}`, 'info');
+}
+
+// ─── ZOOM ─────────────────────────────────────────────────────────────────────
+const ZOOM_CMDS = { in: 18, out: 16 };
+function ptzZoom(dir) {
+  cgiCmd('decoder_control.cgi', { command: ZOOM_CMDS[dir] });
+  setTimeout(() => cgiCmd('decoder_control.cgi', { command: dir === 'in' ? 19 : 17 }), 600);
+  log(`Zoom: ${dir}`, 'info');
+}
+
+// ─── IR CONTROL ──────────────────────────────────────────────────────────────
+const IR_LABELS = ['💡 IR AUTO', '💡 IR ON', '💡 IR OFF'];
+function toggleIR() {
+  state.irMode = (state.irMode + 1) % 3;
+  const btn = document.getElementById('ir-btn');
+  btn.textContent = IR_LABELS[state.irMode];
+  // 0=auto 1=open 2=close
+  cgiCmd('set_misc.cgi', { led_mode: state.irMode });
+  log(`IR mode: ${['auto','on','off'][state.irMode]}`, 'info');
+}
+
+// ─── PATROL ──────────────────────────────────────────────────────────────────
+function patrol() {
+  const btn = document.getElementById('patrol-btn');
+  if (!state.patrolOn) {
+    cgiCmd('decoder_control.cgi', { command: 26 }); // horizontal patrol
+    state.patrolOn = true;
+    btn.textContent = '⏹ STOP PATROL';
+    log('Horizontal patrol started.', 'info');
+  } else {
+    cgiCmd('decoder_control.cgi', { command: 27 }); // stop patrol
+    state.patrolOn = false;
+    btn.textContent = '↻ PATROL';
+    log('Patrol stopped.', 'info');
+  }
+}
+
+// ─── SNAPSHOT ────────────────────────────────────────────────────────────────
+let snaps = [];
+function takeSnapshot() {
+  if (!state.baseUrl) { log('Not connected — cannot snapshot.', 'warn'); return; }
+  const url = `${state.baseUrl}/snapshot.cgi?user=${encodeURIComponent(state.user)}&pwd=${encodeURIComponent(state.pass)}&t=${Date.now()}`;
+  const img = new Image();
+  img.crossOrigin = 'anonymous';
+  img.onload = () => {
+    const now = new Date().toLocaleTimeString();
+    // Try canvas capture
+    try {
+      const c = document.createElement('canvas');
+      c.width = img.naturalWidth || 640; c.height = img.naturalHeight || 480;
+      const ctx = c.getContext('2d'); ctx.drawImage(img, 0, 0);
+      const dataUrl = c.toDataURL('image/jpeg', 0.85);
+      addSnapThumb(dataUrl, now);
+      // Download
+      const a = document.createElement('a');
+      a.href = dataUrl; a.download = `snap_${Date.now()}.jpg`; a.click();
+      log(`Snapshot saved (${now}).`, 'ok');
+    } catch {
+      // CORS fallback: open in new tab
+      window.open(url, '_blank');
+      log(`Snapshot opened in new tab (CORS prevented canvas capture).`, 'warn');
+    }
+  };
+  img.onerror = () => log('Snapshot fetch failed.', 'err');
+  img.src = url;
+}
+
+function addSnapThumb(src, time) {
+  const grid = document.getElementById('snap-grid');
+  // Clear empty state
+  const empty = grid.querySelector('.snap-empty');
+  if (empty) empty.remove();
+  // Max 4 thumbs
+  if (grid.children.length >= 4) grid.removeChild(grid.firstChild);
+  const div = document.createElement('div');
+  div.className = 'snap-thumb';
+  div.innerHTML = `<img src="${src}"><span class="snap-time">${time}</span>`;
+  div.onclick = () => window.open(src, '_blank');
+  grid.appendChild(div);
+}
+
+// ─── SAVE SETTINGS ───────────────────────────────────────────────────────────
+function saveSettings() {
+  const s = {
+    localIp:    document.getElementById('cam-ip').value,
+    localPort:  document.getElementById('cam-port').value,
+    remoteIp:   document.getElementById('cam-ip-remote').value,
+    remotePort: document.getElementById('cam-port-remote').value,
+    user:       document.getElementById('cam-user').value,
+    streamType: document.getElementById('stream-type').value,
+    tab:        state.activeTab
+  };
+  localStorage.setItem('nessos_cfg', JSON.stringify(s));
+}
+
+function loadSettings() {
+  try {
+    const s = JSON.parse(localStorage.getItem('nessos_cfg'));
+    if (!s) return;
+    if (s.localIp)    document.getElementById('cam-ip').value = s.localIp;
+    if (s.localPort)  document.getElementById('cam-port').value = s.localPort;
+    if (s.remoteIp)   document.getElementById('cam-ip-remote').value = s.remoteIp;
+    if (s.remotePort) document.getElementById('cam-port-remote').value = s.remotePort;
+    if (s.user)       document.getElementById('cam-user').value = s.user;
+    if (s.streamType) document.getElementById('stream-type').value = s.streamType;
+    log('Settings restored from local storage.', 'info');
+  } catch {}
+}
+
+// Auto-save settings on change
+document.querySelectorAll('input, select').forEach(el => el.addEventListener('change', saveSettings));
+
+// ─── INIT ─────────────────────────────────────────────────────────────────────
+loadSettings();
+log('Viewer ready. Configure connection and press CONNECT.', 'info');
+log('CAM-E59MB identified as Foscam FI-8919W compatible device.', 'info');
 </script>
 </body>
 </html>

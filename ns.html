@@ -3,1037 +3,800 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Nessos CAM-E59MB — Live Viewer</title>
+<title>NESSOS CAM-E59MB — Control Panel</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Barlow:wght@300;400;500;600;700&family=Barlow+Condensed:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Exo+2:wght@300;400;600;700&display=swap');
-
 :root {
-  --bg:      #080b12;
-  --panel:   #0e1320;
-  --panel2:  #131928;
-  --border:  #1c2640;
-  --accent:  #00e5ff;
-  --accent2: #ff4500;
-  --ok:      #00ff88;
-  --warn:    #ffcc00;
-  --text:    #c8d8f0;
-  --muted:   #3e506e;
-  --mono:    'Share Tech Mono', monospace;
-  --sans:    'Exo 2', sans-serif;
+  --bg:       #07090f;
+  --surface:  #0c1018;
+  --surface2: #111722;
+  --border:   #1a2236;
+  --border2:  #243046;
+  --accent:   #00d4ff;
+  --accent2:  #ff5c35;
+  --ok:       #00e87a;
+  --warn:     #ffb930;
+  --text:     #d4e4f7;
+  --muted:    #3d526e;
+  --dimmed:   #7a96b8;
+  --mono:     'Share Tech Mono', monospace;
+  --sans:     'Barlow', sans-serif;
+  --cond:     'Barlow Condensed', sans-serif;
 }
-
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-body {
-  background: var(--bg);
-  color: var(--text);
-  font-family: var(--sans);
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;overflow:hidden}
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:var(--sans);
+  display:flex;
+  flex-direction:column;
   background-image:
-    radial-gradient(ellipse 80% 50% at 50% -20%, rgba(0,229,255,0.06), transparent),
-    repeating-linear-gradient(0deg, transparent, transparent 39px, rgba(0,229,255,0.025) 39px, rgba(0,229,255,0.025) 40px),
-    repeating-linear-gradient(90deg, transparent, transparent 39px, rgba(0,229,255,0.025) 39px, rgba(0,229,255,0.025) 40px);
+    radial-gradient(ellipse 60% 40% at 50% -10%, rgba(0,212,255,0.05) 0%, transparent 70%),
+    repeating-linear-gradient(0deg,transparent,transparent 59px,rgba(0,212,255,0.018) 59px,rgba(0,212,255,0.018) 60px),
+    repeating-linear-gradient(90deg,transparent,transparent 59px,rgba(0,212,255,0.018) 59px,rgba(0,212,255,0.018) 60px);
 }
 
 /* ── HEADER ── */
-header {
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 12px 24px;
-  border-bottom: 1px solid var(--border);
-  background: rgba(8,11,18,0.96);
-  backdrop-filter: blur(8px);
-  position: sticky; top: 0; z-index: 100;
+header{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 20px;height:52px;
+  border-bottom:1px solid var(--border);
+  background:rgba(7,9,15,0.97);
+  flex-shrink:0;
+  position:relative;z-index:50;
 }
-.logo { display: flex; align-items: center; gap: 12px; }
-.logo-icon {
-  width: 34px; height: 34px;
-  background: linear-gradient(135deg, var(--accent), #0090a8);
-  border-radius: 50%;
-  display: grid; place-items: center;
-  box-shadow: 0 0 16px rgba(0,229,255,0.5);
-  flex-shrink: 0;
+.logo{display:flex;align-items:center;gap:14px}
+.logo-badge{
+  display:flex;align-items:center;gap:0;
+  border:1px solid var(--accent);
+  border-radius:4px;
+  overflow:hidden;
 }
-.logo-icon svg { width: 18px; height: 18px; fill: #000; }
-.logo-text { font-size: 1rem; font-weight: 700; letter-spacing: .1em; color: #fff; }
-.logo-sub  { font-family: var(--mono); font-size: .62rem; color: var(--muted); letter-spacing: .06em; }
-.header-right { display: flex; align-items: center; gap: 16px; }
-.header-status { display: flex; align-items: center; gap: 7px; font-family: var(--mono); font-size: .72rem; }
-.dot { width: 8px; height: 8px; border-radius: 50%; background: var(--muted); flex-shrink: 0; }
-.dot.live  { background: var(--ok);     box-shadow: 0 0 8px var(--ok);     animation: pulse 1.6s infinite; }
-.dot.error { background: var(--accent2);box-shadow: 0 0 8px var(--accent2);}
-@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.3} }
+.logo-badge-left{
+  background:var(--accent);
+  padding:4px 9px;
+  font-family:var(--cond);
+  font-weight:700;font-size:.9rem;
+  color:#000;letter-spacing:.08em;
+  line-height:1;
+}
+.logo-badge-right{
+  padding:4px 9px;
+  font-family:var(--cond);
+  font-weight:600;font-size:.9rem;
+  color:var(--accent);letter-spacing:.06em;
+  line-height:1;
+}
+.logo-model{
+  font-family:var(--mono);
+  font-size:.65rem;color:var(--muted);letter-spacing:.1em;
+  line-height:1;
+}
+.logo-stack{display:flex;flex-direction:column;gap:3px}
 
-/* ── LAYOUT ── */
-main {
-  flex: 1;
-  display: grid;
-  grid-template-columns: 1fr 300px;
+.hdr-center{
+  position:absolute;left:50%;transform:translateX(-50%);
+  display:flex;align-items:center;gap:20px;
+}
+.hdr-stat{display:flex;flex-direction:column;align-items:center;gap:1px}
+.hdr-stat-val{font-family:var(--mono);font-size:.78rem;color:var(--text);line-height:1}
+.hdr-stat-lbl{font-size:.6rem;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;line-height:1}
+.hdr-div{width:1px;height:28px;background:var(--border)}
+
+.hdr-right{display:flex;align-items:center;gap:12px}
+.status-pill{
+  display:flex;align-items:center;gap:7px;
+  padding:5px 12px;
+  border-radius:3px;
+  border:1px solid var(--border2);
+  background:var(--surface);
+  font-family:var(--mono);font-size:.68rem;letter-spacing:.04em;
+  cursor:default;
+}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--muted);flex-shrink:0}
+.dot.live{background:var(--ok);box-shadow:0 0 8px var(--ok);animation:blink 1.8s infinite}
+.dot.error{background:var(--accent2);box-shadow:0 0 8px var(--accent2)}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.25}}
+
+.btn-hdr{
+  height:32px;padding:0 14px;
+  background:transparent;border:1px solid var(--border2);border-radius:3px;
+  color:var(--dimmed);font-family:var(--sans);font-size:.78rem;font-weight:500;
+  cursor:pointer;transition:all .15s;letter-spacing:.02em;
+}
+.btn-hdr:hover{border-color:var(--accent);color:var(--accent);background:rgba(0,212,255,.06)}
+
+/* ── MAIN ── */
+main{
+  flex:1;display:grid;
+  grid-template-columns:1fr 280px;
+  overflow:hidden;
 }
 
 /* ── VIDEO SECTION ── */
-.video-section { padding: 20px; display: flex; flex-direction: column; gap: 14px; }
-
-.video-wrapper {
-  position: relative;
-  background: #000;
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  overflow: hidden;
-  aspect-ratio: 4/3;
-  max-height: 65vh;
-  box-shadow: 0 0 40px rgba(0,0,0,0.8), inset 0 0 0 1px rgba(0,229,255,0.08);
+.video-section{
+  display:flex;flex-direction:column;gap:0;
+  padding:16px 16px 16px 20px;
+  overflow:hidden;
 }
-.video-wrapper img#stream {
-  width: 100%; height: 100%;
-  object-fit: contain;
-  display: block;
+.video-container{
+  position:relative;flex:1;min-height:0;
+  background:#000;
+  border:1px solid var(--border);
+  border-radius:6px;
+  overflow:hidden;
 }
+.video-container img#stream{
+  width:100%;height:100%;
+  object-fit:contain;display:block;
+}
+/* corner-bracket decoration */
+.corner{position:absolute;width:16px;height:16px;z-index:4;pointer-events:none}
+.corner.tl{top:8px;left:8px;border-top:2px solid var(--accent);border-left:2px solid var(--accent)}
+.corner.tr{top:8px;right:8px;border-top:2px solid var(--accent);border-right:2px solid var(--accent)}
+.corner.bl{bottom:8px;left:8px;border-bottom:2px solid var(--accent);border-left:2px solid var(--accent)}
+.corner.br{bottom:8px;right:8px;border-bottom:2px solid var(--accent);border-right:2px solid var(--accent)}
 /* scanlines */
-.video-wrapper::after {
-  content: '';
-  position: absolute; inset: 0;
-  background: repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(0,0,0,0.07) 3px, rgba(0,0,0,0.07) 4px);
-  pointer-events: none; z-index: 2;
+.video-container::after{
+  content:'';position:absolute;inset:0;z-index:3;
+  background:repeating-linear-gradient(0deg,transparent,transparent 3px,rgba(0,0,0,0.06) 3px,rgba(0,0,0,0.06) 4px);
+  pointer-events:none;
 }
-.overlay-corner {
-  position: absolute; top: 10px; left: 10px; z-index: 3;
-  font-family: var(--mono); font-size: .66rem;
-  color: rgba(0,229,255,.75);
-  text-shadow: 0 0 8px var(--accent);
-  pointer-events: none;
-  line-height: 1.7;
+.overlay-info{
+  position:absolute;top:14px;left:14px;z-index:5;
+  font-family:var(--mono);font-size:.62rem;line-height:1.9;
+  color:rgba(0,212,255,.8);
+  text-shadow:0 0 10px rgba(0,212,255,.5);
+  pointer-events:none;
 }
-.overlay-rec {
-  position: absolute; top: 10px; right: 12px; z-index: 3;
-  display: flex; align-items: center; gap: 5px;
-  font-family: var(--mono); font-size: .62rem; color: var(--accent2);
-  pointer-events: none;
+.overlay-rec{
+  position:absolute;top:12px;right:12px;z-index:5;
+  display:flex;align-items:center;gap:5px;
+  font-family:var(--mono);font-size:.6rem;color:var(--accent2);
+  pointer-events:none;
 }
-.rec-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent2); animation: pulse 1s infinite; }
+.rec-dot{width:5px;height:5px;border-radius:50%;background:var(--accent2);animation:blink 1s infinite}
 
-.video-placeholder {
-  position: absolute; inset: 0; z-index: 4;
-  display: flex; flex-direction: column;
-  align-items: center; justify-content: center;
-  gap: 14px; background: #000;
-  color: var(--muted); font-family: var(--mono); font-size: .8rem; text-align: center; padding: 20px;
+.placeholder{
+  position:absolute;inset:0;z-index:6;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;
+  background:#000;color:var(--muted);font-family:var(--mono);font-size:.75rem;text-align:center;padding:20px;
 }
-.video-placeholder svg { opacity: .15; }
-.video-placeholder .hint { color: var(--accent); font-size: .72rem; }
+.placeholder svg{opacity:.1}
+.placeholder .hint{color:var(--accent);font-size:.68rem;margin-top:4px}
+.placeholder .cam-url{font-size:.6rem;color:var(--border2);margin-top:8px;word-break:break-all;max-width:320px}
 
-/* ── PTZ OVERLAY ON VIDEO ── */
-.ptz-overlay {
-  position: absolute; bottom: 14px; right: 14px; z-index: 5;
-  display: none; /* shown when connected */
-  flex-direction: column; align-items: center; gap: 3px;
+/* bottom toolbar under video */
+.video-toolbar{
+  display:flex;align-items:center;gap:8px;
+  padding:10px 0 0;
 }
-.ptz-overlay.visible { display: flex; }
-.ptz-row { display: flex; gap: 3px; }
-
-.ptz-btn {
-  width: 44px; height: 44px;
-  background: rgba(8,11,18,0.82);
-  border: 1px solid rgba(0,229,255,0.35);
-  border-radius: 6px;
-  color: var(--accent);
-  cursor: pointer;
-  display: grid; place-items: center;
-  font-size: 1.1rem;
-  backdrop-filter: blur(4px);
-  transition: background .12s, border-color .12s, transform .1s;
-  user-select: none;
-  -webkit-user-select: none;
-  touch-action: none;
+.btn-tool{
+  height:30px;padding:0 12px;
+  background:var(--surface);border:1px solid var(--border2);border-radius:3px;
+  color:var(--dimmed);font-size:.73rem;font-family:var(--sans);font-weight:500;
+  cursor:pointer;transition:all .15s;white-space:nowrap;
 }
-.ptz-btn:hover  { background: rgba(0,229,255,0.18); border-color: var(--accent); }
-.ptz-btn.active { background: rgba(0,229,255,0.28); border-color: var(--accent); transform: scale(.95); box-shadow: 0 0 10px rgba(0,229,255,.4); }
-.ptz-center {
-  font-size: .6rem; color: rgba(0,229,255,.5);
-  cursor: default;
-  border-color: rgba(0,229,255,0.15);
-}
-.ptz-center:hover { background: rgba(8,11,18,0.82); border-color: rgba(0,229,255,0.15); }
-
-/* ── CONTROLS BAR ── */
-.controls-bar {
-  display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
-}
-.ctrl-group { display: flex; gap: 6px; align-items: center; }
-.ctrl-label { font-family: var(--mono); font-size: .65rem; color: var(--muted); white-space: nowrap; }
-.ctrl-divider { width: 1px; height: 28px; background: var(--border); }
-
-.zoom-btn, .action-btn {
-  padding: 8px 14px;
-  border-radius: 5px; border: 1px solid;
-  font-family: var(--mono); font-size: .75rem;
-  cursor: pointer; transition: all .15s;
-  white-space: nowrap;
-}
-.zoom-btn   { border-color: var(--warn);   color: var(--warn);   background: transparent; }
-.zoom-btn:hover { background: rgba(255,204,0,.12); }
-.snap-btn   { border-color: var(--accent); color: var(--accent); background: transparent; }
-.snap-btn:hover { background: rgba(0,229,255,.12); }
-.ir-btn     { border-color: #aa88ff;       color: #aa88ff;       background: transparent; }
-.ir-btn:hover { background: rgba(170,136,255,.12); }
-.patrol-btn { border-color: var(--ok);     color: var(--ok);     background: transparent; }
-.patrol-btn:hover { background: rgba(0,255,136,.12); }
-
-/* ptz SPEED slider */
-.speed-wrap { display: flex; align-items: center; gap: 6px; }
-.speed-wrap input[type=range] {
-  width: 70px; accent-color: var(--accent);
-  cursor: pointer;
+.btn-tool:hover{border-color:var(--accent);color:var(--accent);background:rgba(0,212,255,.06)}
+.btn-tool.active{border-color:var(--accent);color:var(--accent);background:rgba(0,212,255,.12)}
+.btn-tool.danger{border-color:var(--border2);color:var(--accent2)}
+.btn-tool.danger:hover{border-color:var(--accent2);background:rgba(255,92,53,.08)}
+.spacer{flex:1}
+.quality-badge{
+  font-family:var(--mono);font-size:.62rem;color:var(--muted);
+  padding:0 8px;border-left:1px solid var(--border);
 }
 
-/* ── SIDEBAR ── */
-.sidebar {
-  border-left: 1px solid var(--border);
-  padding: 18px 16px;
-  display: flex; flex-direction: column; gap: 14px;
-  overflow-y: auto; max-height: calc(100vh - 58px);
+/* ── RIGHT PANEL ── */
+.right-panel{
+  display:flex;flex-direction:column;
+  border-left:1px solid var(--border);
+  overflow-y:auto;overflow-x:hidden;
+  background:var(--surface);
 }
-::-webkit-scrollbar { width: 5px; }
-::-webkit-scrollbar-track { background: var(--bg); }
-::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
-
-.card {
-  background: var(--panel);
-  border: 1px solid var(--border);
-  border-radius: 7px;
-  padding: 14px;
+.panel-section{
+  border-bottom:1px solid var(--border);
+  padding:14px 16px;
 }
-.card-title {
-  font-size: .65rem; font-family: var(--mono);
-  color: var(--muted); letter-spacing: .14em;
-  text-transform: uppercase;
-  margin-bottom: 12px; padding-bottom: 8px;
-  border-bottom: 1px solid var(--border);
-  display: flex; justify-content: space-between; align-items: center;
+.panel-title{
+  font-family:var(--cond);font-size:.72rem;font-weight:600;
+  letter-spacing:.14em;text-transform:uppercase;
+  color:var(--muted);margin-bottom:12px;
 }
 
-.form-row { margin-bottom: 10px; }
-.form-row label { display: block; font-size: .68rem; color: var(--muted); margin-bottom: 3px; font-family: var(--mono); }
-.form-row input, .form-row select {
-  width: 100%; background: var(--bg);
-  border: 1px solid var(--border); border-radius: 4px;
-  color: var(--text); padding: 6px 9px;
-  font-family: var(--mono); font-size: .8rem; outline: none;
-  transition: border-color .15s;
+/* ── PTZ CONTROL ── */
+.ptz-ring{
+  display:flex;flex-direction:column;align-items:center;gap:4px;
+  margin-bottom:12px;
 }
-.form-row input:focus, .form-row select:focus { border-color: var(--accent); }
-.form-row select option { background: var(--panel); }
+.ptz-row{display:flex;gap:4px;align-items:center}
+.ptz-btn{
+  width:52px;height:44px;
+  background:var(--surface2);
+  border:1px solid var(--border2);border-radius:4px;
+  color:var(--dimmed);cursor:pointer;
+  display:grid;place-items:center;
+  transition:all .12s;font-size:1.2rem;
+  user-select:none;-webkit-user-select:none;
+}
+.ptz-btn:hover{background:rgba(0,212,255,.08);border-color:var(--accent);color:var(--accent)}
+.ptz-btn:active{background:rgba(0,212,255,.18);transform:scale(.94)}
+.ptz-center{
+  width:44px;height:44px;
+  background:var(--surface2);
+  border:1px solid var(--border2);border-radius:50%;
+  color:var(--dimmed);cursor:pointer;
+  display:grid;place-items:center;
+  transition:all .12s;font-size:.9rem;
+}
+.ptz-center:hover{background:rgba(0,212,255,.08);border-color:var(--accent);color:var(--accent)}
+.ptz-center:active{transform:scale(.94)}
+.ptz-arrow{width:0;height:0;display:block}
+.ptz-arrow.up{border-left:7px solid transparent;border-right:7px solid transparent;border-bottom:10px solid currentColor}
+.ptz-arrow.down{border-left:7px solid transparent;border-right:7px solid transparent;border-top:10px solid currentColor}
+.ptz-arrow.left{border-top:7px solid transparent;border-bottom:7px solid transparent;border-right:10px solid currentColor}
+.ptz-arrow.right{border-top:7px solid transparent;border-bottom:7px solid transparent;border-left:10px solid currentColor}
 
-.btn-primary {
-  width: 100%; padding: 9px;
-  background: var(--accent); border: none; border-radius: 5px;
-  color: #000; font-family: var(--mono); font-size: .82rem; font-weight: 700;
-  cursor: pointer; letter-spacing: .06em;
-  transition: opacity .15s, box-shadow .15s;
+/* zoom + iris row */
+.ctrl-row{display:flex;gap:6px;margin-top:4px}
+.ctrl-group{flex:1;display:flex;flex-direction:column;gap:4px}
+.ctrl-label{font-family:var(--mono);font-size:.58rem;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;text-align:center}
+.ctrl-btns{display:flex;gap:3px}
+.ctrl-btn{
+  flex:1;height:32px;
+  background:var(--surface2);border:1px solid var(--border2);border-radius:3px;
+  color:var(--dimmed);cursor:pointer;font-size:.75rem;font-weight:600;
+  transition:all .12s;font-family:var(--sans);
 }
-.btn-primary:hover { opacity: .88; box-shadow: 0 0 16px rgba(0,229,255,.45); }
-.btn-secondary {
-  width: 100%; padding: 7px;
-  background: transparent; border: 1px solid var(--border); border-radius: 5px;
-  color: var(--muted); font-family: var(--mono); font-size: .75rem;
-  cursor: pointer; margin-top: 5px; transition: border-color .15s, color .15s;
-}
-.btn-secondary:hover { border-color: var(--accent2); color: var(--accent2); }
+.ctrl-btn:hover{background:rgba(0,212,255,.08);border-color:var(--accent);color:var(--accent)}
+.ctrl-btn:active{transform:scale(.94)}
 
-.info-row {
-  display: flex; justify-content: space-between; align-items: flex-start;
-  padding: 4px 0; border-bottom: 1px solid rgba(28,38,64,.5);
-  font-size: .72rem; gap: 8px;
+/* presets */
+.preset-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.preset-btn{
+  height:34px;
+  background:var(--surface2);border:1px solid var(--border2);border-radius:3px;
+  color:var(--dimmed);font-family:var(--mono);font-size:.68rem;
+  cursor:pointer;transition:all .12s;display:flex;align-items:center;justify-content:center;gap:6px;
 }
-.info-row:last-child { border-bottom: none; }
-.info-key { color: var(--muted); font-family: var(--mono); flex-shrink: 0; }
-.info-val { color: var(--text); font-family: var(--mono); font-size: .7rem; text-align: right; word-break: break-all; }
-.info-val.ok   { color: var(--ok); }
-.info-val.warn { color: var(--warn); }
-.info-val.err  { color: var(--accent2); }
+.preset-btn:hover{background:rgba(0,212,255,.06);border-color:var(--border);color:var(--text)}
+.preset-btn.set-mode{border-color:var(--warn);color:var(--warn);background:rgba(255,185,48,.06)}
 
-.log-box {
-  background: var(--bg); border: 1px solid var(--border);
-  border-radius: 4px; padding: 7px 9px;
-  height: 110px; overflow-y: auto;
-  font-family: var(--mono); font-size: .65rem; line-height: 1.65; color: var(--muted);
+/* settings form */
+.form-row{display:flex;flex-direction:column;gap:4px;margin-bottom:10px}
+.form-row label{font-family:var(--mono);font-size:.62rem;color:var(--muted);letter-spacing:.06em}
+.form-row input{
+  height:32px;
+  background:var(--bg);border:1px solid var(--border2);border-radius:3px;
+  color:var(--text);font-family:var(--mono);font-size:.72rem;
+  padding:0 10px;width:100%;
+  outline:none;transition:border-color .15s;
 }
-.log-ok   { color: var(--ok); }
-.log-err  { color: var(--accent2); }
-.log-info { color: var(--accent); }
-.log-warn { color: var(--warn); }
+.form-row input:focus{border-color:var(--accent)}
+.form-row input::placeholder{color:var(--muted)}
 
-/* Snapshots */
-.snaps-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 5px; }
-.snap-thumb {
-  aspect-ratio: 4/3; background: var(--bg);
-  border: 1px solid var(--border); border-radius: 4px;
-  overflow: hidden; cursor: pointer; position: relative;
-  transition: border-color .15s;
+.btn-connect{
+  width:100%;height:34px;
+  background:var(--accent);border:none;border-radius:3px;
+  color:#000;font-family:var(--cond);font-size:.85rem;font-weight:700;
+  cursor:pointer;letter-spacing:.06em;text-transform:uppercase;
+  transition:all .15s;
 }
-.snap-thumb:hover { border-color: var(--accent); }
-.snap-thumb img { width: 100%; height: 100%; object-fit: cover; }
-.snap-time {
-  position: absolute; bottom: 3px; left: 3px;
-  font-family: var(--mono); font-size: .55rem; color: #fff;
-  background: rgba(0,0,0,.7); padding: 1px 4px; border-radius: 2px;
-}
-.snap-empty { color: var(--muted); font-family: var(--mono); font-size: .7rem; text-align: center; padding: 16px 0; grid-column: 1/-1; }
+.btn-connect:hover{background:#00f0ff;box-shadow:0 0 16px rgba(0,212,255,.35)}
+.btn-connect:active{transform:scale(.98)}
 
-/* Tabs */
-.tabs { display: flex; border-bottom: 1px solid var(--border); margin-bottom: 12px; }
-.tab-btn {
-  padding: 6px 12px; background: transparent; border: none;
-  font-family: var(--mono); font-size: .68rem; letter-spacing: .07em;
-  color: var(--muted); cursor: pointer;
-  border-bottom: 2px solid transparent; transition: color .15s, border-color .15s;
+/* log */
+.log-box{
+  background:var(--bg);border:1px solid var(--border);border-radius:3px;
+  padding:8px;max-height:80px;overflow-y:auto;
+  font-family:var(--mono);font-size:.6rem;line-height:1.7;
+  color:var(--muted);
 }
-.tab-btn.active { color: var(--accent); border-bottom-color: var(--accent); }
+.log-entry{display:block}
+.log-entry.ok{color:var(--ok)}
+.log-entry.err{color:var(--accent2)}
+.log-entry.info{color:var(--accent)}
 
-/* Help */
-.help-block {
-  border-left: 2px solid var(--accent);
-  padding: 10px 12px;
-  font-size: .72rem; line-height: 1.75; color: var(--text);
-  background: rgba(0,229,255,0.03);
-  border-radius: 0 5px 5px 0;
+/* toast */
+#toast{
+  position:fixed;bottom:20px;left:50%;transform:translateX(-50%);
+  background:var(--surface2);border:1px solid var(--border2);border-radius:4px;
+  padding:8px 18px;font-family:var(--mono);font-size:.72rem;
+  color:var(--text);z-index:200;opacity:0;
+  transition:opacity .25s;pointer-events:none;white-space:nowrap;
 }
-.help-block h3 { font-size: .72rem; color: var(--accent); margin: 10px 0 5px; font-family: var(--mono); }
-.help-block h3:first-child { margin-top: 0; }
-.help-block code {
-  background: var(--bg); border: 1px solid var(--border);
-  border-radius: 3px; padding: 1px 5px;
-  font-family: var(--mono); font-size: .7rem; color: var(--warn);
-}
-.help-block p { margin-bottom: 6px; }
-.help-block ul { padding-left: 16px; }
-.help-block li { margin-bottom: 3px; }
+#toast.show{opacity:1}
 
-.toggle-btn {
-  background: transparent; border: none;
-  color: var(--muted); font-family: var(--mono); font-size: .65rem;
-  cursor: pointer; text-decoration: underline;
-}
-.toggle-btn:hover { color: var(--accent); }
-
-#help-panel { display: none; margin-top: 8px; }
-#help-panel.open { display: block; }
-
-/* PTZ standalone panel (also shown in sidebar for mobile) */
-.ptz-panel {
-  display: grid;
-  grid-template-columns: repeat(3, 46px);
-  grid-template-rows: repeat(3, 46px);
-  gap: 4px;
-  justify-content: center;
-}
-.ptz-panel .ptz-btn { width: 46px; height: 46px; position: relative; }
-
-/* Speed indicator */
-.speed-val { font-family: var(--mono); font-size: .65rem; color: var(--accent); min-width: 16px; }
-
-/* Responsive */
-@media (max-width: 820px) {
-  main { grid-template-columns: 1fr; }
-  .sidebar { border-left: none; border-top: 1px solid var(--border); max-height: none; }
-  .ptz-overlay { bottom: 8px; right: 8px; }
-  .ptz-btn { width: 38px; height: 38px; font-size: .95rem; }
-}
-
-/* connection badge */
-.badge {
-  display: inline-flex; align-items: center; gap: 5px;
-  font-family: var(--mono); font-size: .62rem; padding: 3px 8px;
-  border-radius: 20px; border: 1px solid var(--border);
-  color: var(--muted);
-}
-.badge.live   { border-color: var(--ok);     color: var(--ok); }
-.badge.error  { border-color: var(--accent2); color: var(--accent2); }
+/* scrollbar */
+::-webkit-scrollbar{width:4px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px}
 </style>
 </head>
 <body>
 
 <header>
   <div class="logo">
-    <div class="logo-icon">
-      <svg viewBox="0 0 24 24"><path d="M17 10.5V7c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h12c.55 0 1-.45 1-1v-3.5l4 4v-11l-4 4z"/></svg>
+    <div class="logo-badge">
+      <span class="logo-badge-left">NESSOS</span>
+      <span class="logo-badge-right">CAM</span>
     </div>
-    <div>
-      <div class="logo-text">NESSOS CAM-E59MB</div>
-      <div class="logo-sub">INDEPENDENT VIEWER — NO CLOUD REQUIRED</div>
+    <div class="logo-stack">
+      <span class="logo-model">E59MB · IP CAMERA CONTROL</span>
     </div>
   </div>
-  <div class="header-right">
-    <div class="header-status">
-      <div class="dot" id="status-dot"></div>
+
+  <div class="hdr-center">
+    <div class="hdr-stat">
+      <span class="hdr-stat-val" id="hdr-ip">—</span>
+      <span class="hdr-stat-lbl">Address</span>
+    </div>
+    <div class="hdr-div"></div>
+    <div class="hdr-stat">
+      <span class="hdr-stat-val" id="hdr-time">—</span>
+      <span class="hdr-stat-lbl">Local Time</span>
+    </div>
+    <div class="hdr-div"></div>
+    <div class="hdr-stat">
+      <span class="hdr-stat-val" id="hdr-fps">— FPS</span>
+      <span class="hdr-stat-lbl">Refresh</span>
+    </div>
+  </div>
+
+  <div class="hdr-right">
+    <div class="status-pill" id="status-pill">
+      <span class="dot" id="status-dot"></span>
       <span id="status-text">OFFLINE</span>
     </div>
+    <button class="btn-hdr" onclick="toggleFullscreen()">⛶ FULLSCREEN</button>
   </div>
 </header>
 
 <main>
+  <!-- VIDEO -->
+  <div class="video-section">
+    <div class="video-container" id="videoContainer">
+      <!-- corner brackets -->
+      <div class="corner tl"></div><div class="corner tr"></div>
+      <div class="corner bl"></div><div class="corner br"></div>
 
-  <!-- ═══ VIDEO SECTION ═══ -->
-  <section class="video-section">
+      <div class="overlay-info" id="overlayInfo">
+        IP: —<br>
+        <span id="tsLabel">—</span>
+      </div>
+      <div class="overlay-rec" id="overlayRec" style="display:none">
+        <span class="rec-dot"></span> LIVE
+      </div>
 
-    <div class="video-wrapper" id="video-wrapper">
-      <!-- Placeholder -->
-      <div class="video-placeholder" id="placeholder">
+      <div class="placeholder" id="placeholder">
         <svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
-          <rect x="2" y="3" width="20" height="14" rx="2"/>
-          <path d="M8 21h8M12 17v4"/>
+          <rect x="2" y="7" width="20" height="14" rx="2"/>
+          <path d="M16 3l-4 4-4-4"/>
+          <circle cx="12" cy="14" r="3"/>
         </svg>
-        <div>Camera not connected</div>
-        <div class="hint">Fill IP / Port and press CONNECT →</div>
+        <span>CAMERA OFFLINE</span>
+        <span class="hint">Configure camera settings below and click CONNECT</span>
+        <span class="cam-url" id="urlPreview">—</span>
       </div>
 
-      <!-- Stream image -->
-      <img id="stream" src="" alt="" style="display:none;" crossorigin="anonymous">
-
-      <!-- Overlay info -->
-      <div class="overlay-corner" id="overlay" style="display:none;">
-        <div id="ov-name">CAM-E59MB · 192.168.100.155:13900</div>
-        <div id="ov-time"></div>
-        <div id="ov-fps">–</div>
-      </div>
-      <div class="overlay-rec" id="overlay-rec" style="display:none;">
-        <div class="rec-dot"></div> LIVE
-      </div>
-
-      <!-- PTZ D-PAD overlay (shown when connected) -->
-      <div class="ptz-overlay" id="ptz-overlay">
-        <div class="ptz-row">
-          <button class="ptz-btn ptz-center" style="opacity:0;pointer-events:none;"></button>
-          <button class="ptz-btn" id="btn-up"    title="Move Up (hold)">▲</button>
-          <button class="ptz-btn ptz-center" style="opacity:0;pointer-events:none;"></button>
-        </div>
-        <div class="ptz-row">
-          <button class="ptz-btn" id="btn-left"  title="Move Left (hold)">◀</button>
-          <button class="ptz-btn ptz-center"      title="Stop">■</button>
-          <button class="ptz-btn" id="btn-right"  title="Move Right (hold)">▶</button>
-        </div>
-        <div class="ptz-row">
-          <button class="ptz-btn ptz-center" style="opacity:0;pointer-events:none;"></button>
-          <button class="ptz-btn" id="btn-down"   title="Move Down (hold)">▼</button>
-          <button class="ptz-btn ptz-center" style="opacity:0;pointer-events:none;"></button>
-        </div>
-      </div>
+      <img id="stream" src="" alt="Camera stream" style="display:none">
     </div>
 
-    <!-- ── CONTROLS BAR ── -->
-    <div class="controls-bar">
-
-      <span class="ctrl-label">ZOOM</span>
-      <div class="ctrl-group">
-        <button class="zoom-btn action-btn" id="btn-zoomin"  title="Zoom In (hold)">🔍＋</button>
-        <button class="zoom-btn action-btn" id="btn-zoomout" title="Zoom Out (hold)">🔍－</button>
-      </div>
-
-      <div class="ctrl-divider"></div>
-
-      <span class="ctrl-label">SPEED</span>
-      <div class="speed-wrap">
-        <input type="range" id="ptz-speed" min="1" max="5" value="3" step="1">
-        <span class="speed-val" id="speed-val">3</span>
-      </div>
-
-      <div class="ctrl-divider"></div>
-
-      <button class="action-btn snap-btn"   onclick="takeSnapshot()">📷 SNAP</button>
-      <button class="action-btn ir-btn"     onclick="toggleIR()" id="ir-btn">💡 IR AUTO</button>
-      <button class="action-btn patrol-btn" onclick="patrol()"   id="patrol-btn">↻ PATROL</button>
+    <div class="video-toolbar">
+      <button class="btn-tool" onclick="takeSnapshot()">📷 SNAPSHOT</button>
+      <button class="btn-tool" id="btn-patrol" onclick="togglePatrol()">⟳ H-PATROL</button>
+      <button class="btn-tool" onclick="sendCmd(25)" title="Go to center/home position">⌂ HOME</button>
+      <span class="spacer"></span>
+      <button class="btn-tool danger" id="btn-disconnect" onclick="disconnect()" style="display:none">✕ DISCONNECT</button>
+      <span class="quality-badge" id="qualBadge">MJPEG · AUTO</span>
     </div>
+  </div>
 
-  </section>
-
-  <!-- ═══ SIDEBAR ═══ -->
-  <aside class="sidebar">
+  <!-- RIGHT PANEL -->
+  <div class="right-panel">
 
     <!-- CONNECTION -->
-    <div class="card">
-      <div class="card-title">Camera Connection</div>
-
-      <div class="tabs">
-        <button class="tab-btn active" onclick="showTab('local',this)">Local</button>
-        <button class="tab-btn"        onclick="showTab('remote',this)">Remote</button>
-      </div>
-
-      <div id="tab-local">
-        <div class="form-row">
-          <label>Camera IP Address</label>
-          <input type="text" id="cam-ip" value="192.168.100.155" placeholder="192.168.1.18">
-        </div>
-        <div class="form-row">
-          <label>HTTP Port</label>
-          <input type="text" id="cam-port" value="13900" placeholder="88 or 13900">
-        </div>
-      </div>
-
-      <div id="tab-remote" style="display:none;">
-        <div class="form-row">
-          <label>Public IP / DDNS hostname</label>
-          <input type="text" id="cam-ip-remote" placeholder="myhome.ddns.net">
-        </div>
-        <div class="form-row">
-          <label>Forwarded Port</label>
-          <input type="text" id="cam-port-remote" value="8088" placeholder="8088">
-        </div>
-        <div style="font-size:.68rem;color:var(--muted);margin-bottom:10px;line-height:1.6;font-family:var(--mono);">
-          ⚠ Port-forward on router: external <code style="color:var(--warn)">8088</code> → <code style="color:var(--warn)">192.168.100.155:13900</code>
-        </div>
-      </div>
-
+    <div class="panel-section">
+      <div class="panel-title">Connection</div>
       <div class="form-row">
-        <label>Username</label>
-        <input type="text" id="cam-user" value="admin" placeholder="admin">
+        <label>IP ADDRESS : PORT</label>
+        <input type="text" id="inp-ip" value="192.168.100.155:13900" placeholder="192.168.100.155:13900">
       </div>
       <div class="form-row">
-        <label>Password</label>
-        <input type="password" id="cam-pass" placeholder="(empty if none)">
+        <label>USERNAME</label>
+        <input type="text" id="inp-user" value="admin" placeholder="admin">
       </div>
-
-      <button class="btn-primary"   onclick="connect()">▶ CONNECT</button>
-      <button class="btn-secondary" onclick="disconnect()">■ DISCONNECT</button>
+      <div class="form-row">
+        <label>PASSWORD</label>
+        <input type="password" id="inp-pwd" value="" placeholder="(leave blank if none)">
+      </div>
+      <button class="btn-connect" id="btn-connect" onclick="connect()">CONNECT</button>
     </div>
 
-    <!-- PTZ PANEL (also usable from sidebar) -->
-    <div class="card">
-      <div class="card-title">PTZ Control (click or hold)</div>
-      <div class="ptz-panel" id="ptz-panel-sidebar">
-        <div></div>
-        <button class="ptz-btn" id="sb-up"    title="Up">▲</button>
-        <div></div>
-        <button class="ptz-btn" id="sb-left"  title="Left">◀</button>
-        <button class="ptz-btn ptz-center"     title="Stop all">■</button>
-        <button class="ptz-btn" id="sb-right"  title="Right">▶</button>
-        <div></div>
-        <button class="ptz-btn" id="sb-down"  title="Down">▼</button>
-        <div></div>
+    <!-- PTZ CONTROL -->
+    <div class="panel-section">
+      <div class="panel-title">PTZ Control</div>
+      <div class="ptz-ring">
+        <div class="ptz-row">
+          <div style="width:52px"></div>
+          <button class="ptz-btn" id="ptz-up"
+            onmousedown="startMove(2)" onmouseup="stopMove(3)"
+            ontouchstart="startMove(2)" ontouchend="stopMove(3)">
+            <span class="ptz-arrow up"></span>
+          </button>
+          <div style="width:52px"></div>
+        </div>
+        <div class="ptz-row">
+          <button class="ptz-btn" id="ptz-left"
+            onmousedown="startMove(6)" onmouseup="stopMove(7)"
+            ontouchstart="startMove(6)" ontouchend="stopMove(7)">
+            <span class="ptz-arrow left"></span>
+          </button>
+          <button class="ptz-center" onclick="sendCmd(25)" title="Home / Center">⌂</button>
+          <button class="ptz-btn" id="ptz-right"
+            onmousedown="startMove(4)" onmouseup="stopMove(5)"
+            ontouchstart="startMove(4)" ontouchend="stopMove(5)">
+            <span class="ptz-arrow right"></span>
+          </button>
+        </div>
+        <div class="ptz-row">
+          <div style="width:52px"></div>
+          <button class="ptz-btn" id="ptz-down"
+            onmousedown="startMove(0)" onmouseup="stopMove(1)"
+            ontouchstart="startMove(0)" ontouchend="stopMove(1)">
+            <span class="ptz-arrow down"></span>
+          </button>
+          <div style="width:52px"></div>
+        </div>
       </div>
-      <div style="display:flex;gap:6px;margin-top:10px;justify-content:center;">
-        <button class="zoom-btn action-btn" id="sb-zoomin"  style="padding:6px 18px;">ZOOM +</button>
-        <button class="zoom-btn action-btn" id="sb-zoomout" style="padding:6px 18px;">ZOOM −</button>
+
+      <!-- Diagonal -->
+      <div class="ctrl-row" style="margin-bottom:10px">
+        <button class="ctrl-btn" onmousedown="startMove(92)" onmouseup="stopMove(1)" title="↙ Left-Down">↙</button>
+        <button class="ctrl-btn" onmousedown="startMove(90)" onmouseup="stopMove(1)" title="↖ Left-Up">↖</button>
+        <button class="ctrl-btn" onmousedown="startMove(91)" onmouseup="stopMove(1)" title="↗ Right-Up">↗</button>
+        <button class="ctrl-btn" onmousedown="startMove(93)" onmouseup="stopMove(1)" title="↘ Right-Down">↘</button>
+      </div>
+
+      <div class="ctrl-row">
+        <div class="ctrl-group">
+          <span class="ctrl-label">Zoom</span>
+          <div class="ctrl-btns">
+            <button class="ctrl-btn"
+              onmousedown="startMove(18)" onmouseup="stopMove(19)" title="Zoom In">＋</button>
+            <button class="ctrl-btn"
+              onmousedown="startMove(16)" onmouseup="stopMove(17)" title="Zoom Out">－</button>
+          </div>
+        </div>
+        <div class="ctrl-group">
+          <span class="ctrl-label">Focus</span>
+          <div class="ctrl-btns">
+            <button class="ctrl-btn"
+              onmousedown="startMove(34)" onmouseup="stopMove(35)" title="Focus +">＋</button>
+            <button class="ctrl-btn"
+              onmousedown="startMove(36)" onmouseup="stopMove(37)" title="Focus -">－</button>
+          </div>
+        </div>
+        <div class="ctrl-group">
+          <span class="ctrl-label">Iris</span>
+          <div class="ctrl-btns">
+            <button class="ctrl-btn"
+              onmousedown="startMove(40)" onmouseup="stopMove(41)" title="Iris Open">＋</button>
+            <button class="ctrl-btn"
+              onmousedown="startMove(42)" onmouseup="stopMove(43)" title="Iris Close">－</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Speed -->
+      <div class="form-row" style="margin-top:10px;gap:6px">
+        <label>MOVE SPEED (0–100)</label>
+        <div style="display:flex;align-items:center;gap:8px">
+          <input type="range" id="speed-range" min="0" max="100" value="30"
+            style="flex:1;height:4px;accent-color:var(--accent)">
+          <span style="font-family:var(--mono);font-size:.72rem;color:var(--text);min-width:28px;text-align:right" id="speed-val">30</span>
+        </div>
       </div>
     </div>
 
-    <!-- STATUS -->
-    <div class="card">
-      <div class="card-title">Status</div>
-      <div class="info-row"><span class="info-key">Connection</span> <span class="info-val" id="s-conn">—</span></div>
-      <div class="info-row"><span class="info-key">Stream</span>     <span class="info-val" id="s-url" style="font-size:.62rem;">—</span></div>
-      <div class="info-row"><span class="info-key">Model</span>      <span class="info-val ok">CAM-E59MB</span></div>
-      <div class="info-row"><span class="info-key">API</span>        <span class="info-val ok">Foscam CGI</span></div>
-      <div class="info-row"><span class="info-key">Resolution</span> <span class="info-val">640×480 VGA</span></div>
-      <div class="info-row"><span class="info-key">IR LEDs</span>    <span class="info-val">22 LED (15 m)</span></div>
-      <div class="info-row"><span class="info-key">FPS</span>        <span class="info-val" id="s-fps">—</span></div>
-      <div class="info-row"><span class="info-key">PTZ cmd</span>    <span class="info-val" id="s-ptz">—</span></div>
-    </div>
-
-    <!-- SNAPSHOTS -->
-    <div class="card">
-      <div class="card-title">Snapshots</div>
-      <div class="snaps-grid" id="snap-grid">
-        <div class="snap-empty">No snapshots yet</div>
+    <!-- PRESETS -->
+    <div class="panel-section">
+      <div class="panel-title">Presets</div>
+      <div class="preset-grid" id="preset-grid">
+        <!-- filled by JS -->
+      </div>
+      <div style="display:flex;gap:6px;margin-top:8px">
+        <button class="ctrl-btn" onclick="toggleSetMode()" id="btn-setmode"
+          style="height:30px;font-size:.68rem;font-family:var(--mono)">SET MODE</button>
+        <button class="ctrl-btn" onclick="sendCmd(25)"
+          style="height:30px;font-size:.68rem;font-family:var(--mono)">HOME</button>
       </div>
     </div>
 
     <!-- LOG -->
-    <div class="card">
-      <div class="card-title">
-        Event Log
-        <button class="toggle-btn" onclick="document.getElementById('log').innerHTML=''">clear</button>
-      </div>
-      <div class="log-box" id="log"></div>
+    <div class="panel-section">
+      <div class="panel-title">Activity Log</div>
+      <div class="log-box" id="log-box"></div>
     </div>
 
-    <!-- HELP -->
-    <div class="card">
-      <div class="card-title">
-        Setup Guide
-        <button class="toggle-btn" onclick="toggleHelp()" id="help-toggle">show ▼</button>
-      </div>
-      <div id="help-panel">
-        <div class="help-block">
-          <h3>Your Camera URL</h3>
-          <p>Stream: <code>http://192.168.100.155:13900/videostream.cgi?user=admin&pwd=</code></p>
-          <p>Snapshot: <code>http://192.168.100.155:13900/snapshot.cgi?user=admin&pwd=</code></p>
-          <h3>PTZ Commands (Foscam CGI)</h3>
-          <p>The camera uses <code>/decoder_control.cgi?command=N</code> where N is:</p>
-          <ul>
-            <li>0=Up start · 1=Up stop</li>
-            <li>2=Down start · 3=Down stop</li>
-            <li>4=Right start · 5=Right stop</li>
-            <li>6=Left start · 7=Left stop</li>
-            <li>16=Zoom– · 17=Zoom– stop · 18=Zoom+ · 19=Zoom+ stop</li>
-            <li>26=H.Patrol start · 27=H.Patrol stop</li>
-          </ul>
-          <h3>PTZ Not Working?</h3>
-          <p>Browser CORS blocks <code>fetch()</code> — this viewer uses <code>&lt;img&gt;</code> tags to fire CGI commands which bypasses CORS. Hold buttons for continuous motion. The camera must be on the same network as this page, OR port-forwarded for remote access.</p>
-          <h3>Remote Access</h3>
-          <ul>
-            <li>Router: forward external port → <code>192.168.100.155:13900</code></li>
-            <li>Use DuckDNS or No-IP for free DDNS if your public IP changes</li>
-          </ul>
-        </div>
-      </div>
-    </div>
-
-  </aside>
+  </div>
 </main>
 
+<div id="toast"></div>
+
 <script>
-// ════════════════════════════════════════════════════════════
-//  STATE
-// ════════════════════════════════════════════════════════════
-const state = {
-  connected: false,
-  baseUrl: '',
+const CAM = {
+  ip: '192.168.100.155:13900',
   user: 'admin',
-  pass: '',
-  irMode: 0,        // 0=auto 1=on 2=off
-  patrolOn: false,
-  lastFps: '–',
-  fpsFrames: 0,
-  fpsT0: 0,
+  pwd: '',
+  connected: false,
+  patrolling: false,
+  settingPreset: false,
+  streamTimer: null,
+  clockTimer: null,
+  frameCount: 0,
   fpsTimer: null,
-  pollTimer: null,
-  activeTab: 'local',
-  ptzHoldTimer: null,  // interval for repeated CGI pings while held
-  ptzActive: null,     // currently active direction
 };
 
-// ════════════════════════════════════════════════════════════
-//  LOG
-// ════════════════════════════════════════════════════════════
-function log(msg, type = 'info') {
-  const box = document.getElementById('log');
-  const ts  = new Date().toTimeString().slice(0, 8);
-  const el  = document.createElement('div');
-  el.className = `log-${type}`;
-  el.textContent = `[${ts}] ${msg}`;
-  box.appendChild(el);
-  box.scrollTop = box.scrollHeight;
-  if (box.children.length > 100) box.removeChild(box.children[0]);
-}
+const PRESETS = [
+  {id:0,label:'PRESET 1'},{id:1,label:'PRESET 2'},
+  {id:2,label:'PRESET 3'},{id:3,label:'PRESET 4'},
+  {id:4,label:'PRESET 5'},{id:5,label:'PRESET 6'},
+];
 
-// ════════════════════════════════════════════════════════════
-//  CLOCK
-// ════════════════════════════════════════════════════════════
-setInterval(() => {
-  const d = new Date();
-  document.getElementById('ov-time').textContent = d.toLocaleString();
-  document.getElementById('ov-fps').textContent  = `FPS: ${state.lastFps}`;
-}, 1000);
-
-// ════════════════════════════════════════════════════════════
-//  TABS
-// ════════════════════════════════════════════════════════════
-function showTab(tab, btn) {
-  document.getElementById('tab-local').style.display  = tab === 'local'  ? '' : 'none';
-  document.getElementById('tab-remote').style.display = tab === 'remote' ? '' : 'none';
-  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-  state.activeTab = tab;
-}
-
-function toggleHelp() {
-  const p = document.getElementById('help-panel');
-  const b = document.getElementById('help-toggle');
-  p.classList.toggle('open');
-  b.textContent = p.classList.contains('open') ? 'hide ▲' : 'show ▼';
-}
-
-// ════════════════════════════════════════════════════════════
-//  BUILD BASE URL
-// ════════════════════════════════════════════════════════════
-function buildBaseUrl() {
-  state.user = document.getElementById('cam-user').value.trim() || 'admin';
-  state.pass = document.getElementById('cam-pass').value;
-
-  let ip, port;
-  if (state.activeTab === 'local') {
-    ip   = document.getElementById('cam-ip').value.trim();
-    port = document.getElementById('cam-port').value.trim() || '13900';
-  } else {
-    ip   = document.getElementById('cam-ip-remote').value.trim();
-    port = document.getElementById('cam-port-remote').value.trim() || '8088';
-  }
-  if (!ip) { alert('Enter the camera IP address.'); return null; }
-  return `http://${ip}:${port}`;
-}
-
-// ════════════════════════════════════════════════════════════
-//  CONNECT
-// ════════════════════════════════════════════════════════════
-function connect() {
-  const base = buildBaseUrl();
-  if (!base) return;
-  state.baseUrl = base;
-  disconnect(true); // silent cleanup
-
-  log(`Connecting to ${base} …`, 'info');
-
-  const streamImg   = document.getElementById('stream');
-  const placeholder = document.getElementById('placeholder');
-  const overlay     = document.getElementById('overlay');
-  const overlayRec  = document.getElementById('overlay-rec');
-  const ptzOvl      = document.getElementById('ptz-overlay');
-
-  const url = `${base}/videostream.cgi?user=${enc(state.user)}&pwd=${enc(state.pass)}&resolution=8&rate=0`;
-  document.getElementById('s-url').textContent = url;
-
-  streamImg.onerror = () => {
-    log('MJPEG stream error — switching to snapshot poll fallback…', 'warn');
-    setStatus('warn');
-    startSnapshotPoll(base);
-  };
-  streamImg.onload = () => {
-    if (!state.connected) {
-      state.connected = true;
-      setStatus('live');
-      log('Stream connected.', 'ok');
-      placeholder.style.display = 'none';
-      overlay.style.display     = 'block';
-      overlayRec.style.display  = 'flex';
-      ptzOvl.classList.add('visible');
-      startFpsCounter();
-    }
-  };
-
-  streamImg.src = url;
-  streamImg.style.display = 'block';
-  placeholder.style.display = 'none';
-}
-
-// ════════════════════════════════════════════════════════════
-//  SNAPSHOT POLL FALLBACK
-// ════════════════════════════════════════════════════════════
-function startSnapshotPoll(base) {
-  clearInterval(state.pollTimer);
-  const img = document.getElementById('stream');
-  state.fpsT0 = Date.now(); let frames = 0;
-  const tick = () => {
-    const url = `${base}/snapshot.cgi?user=${enc(state.user)}&pwd=${enc(state.pass)}&t=${Date.now()}`;
-    img.src = url;
-    frames++;
-    const dt = (Date.now() - state.fpsT0) / 1000;
-    state.lastFps = (frames / dt).toFixed(1);
-    document.getElementById('s-fps').textContent = state.lastFps + ' fps';
-  };
-  state.pollTimer = setInterval(tick, 350);
-  state.connected = true;
-  setStatus('live');
-  document.getElementById('placeholder').style.display    = 'none';
-  document.getElementById('overlay').style.display        = 'block';
-  document.getElementById('overlay-rec').style.display    = 'flex';
-  document.getElementById('ptz-overlay').classList.add('visible');
-  log('Snapshot polling active (≈3 fps).', 'ok');
-  document.getElementById('s-url').textContent = `${base}/snapshot.cgi (poll)`;
-}
-
-// ════════════════════════════════════════════════════════════
-//  DISCONNECT
-// ════════════════════════════════════════════════════════════
-function disconnect(silent = false) {
-  clearInterval(state.pollTimer);
-  clearInterval(state.fpsTimer);
-  clearInterval(state.ptzHoldTimer);
-  state.ptzHoldTimer = null;
-  state.ptzActive    = null;
-  state.connected    = false;
-  state.patrolOn     = false;
-  document.getElementById('patrol-btn').textContent = '↻ PATROL';
-
-  const img = document.getElementById('stream');
-  img.src = ''; img.style.display = 'none';
-  document.getElementById('placeholder').style.display    = 'flex';
-  document.getElementById('overlay').style.display        = 'none';
-  document.getElementById('overlay-rec').style.display    = 'none';
-  document.getElementById('ptz-overlay').classList.remove('visible');
-  document.querySelectorAll('.ptz-btn').forEach(b => b.classList.remove('active'));
-
-  setStatus('offline');
-  document.getElementById('s-fps').textContent = '—';
-  document.getElementById('s-ptz').textContent = '—';
-  state.lastFps = '–';
-  if (!silent) log('Disconnected.', 'warn');
-}
-
-// ════════════════════════════════════════════════════════════
-//  STATUS
-// ════════════════════════════════════════════════════════════
-function setStatus(s) {
-  const dot  = document.getElementById('status-dot');
-  const txt  = document.getElementById('status-text');
-  const conn = document.getElementById('s-conn');
-  dot.className = `dot ${s === 'live' ? 'live' : s === 'warn' ? '' : s === 'error' ? 'error' : ''}`;
-  if (s === 'live') {
-    txt.textContent  = 'LIVE';
-    conn.textContent = 'Live';
-    conn.className   = 'info-val ok';
-  } else if (s === 'warn') {
-    txt.textContent  = 'CONNECTING';
-    conn.textContent = 'Fallback';
-    conn.className   = 'info-val warn';
-  } else if (s === 'error') {
-    txt.textContent  = 'ERROR';
-    conn.textContent = 'Error';
-    conn.className   = 'info-val err';
-  } else {
-    txt.textContent  = 'OFFLINE';
-    conn.textContent = 'Offline';
-    conn.className   = 'info-val';
-  }
-}
-
-// ════════════════════════════════════════════════════════════
-//  FPS
-// ════════════════════════════════════════════════════════════
-function startFpsCounter() {
-  clearInterval(state.fpsTimer);
-  let frames = 0; let t0 = Date.now();
-  const img = document.getElementById('stream');
-  const onFrame = () => {
-    frames++;
-    const dt = (Date.now() - t0) / 1000;
-    if (dt >= 2) {
-      state.lastFps = (frames / dt).toFixed(1);
-      document.getElementById('s-fps').textContent = state.lastFps + ' fps';
-      frames = 0; t0 = Date.now();
-    }
-  };
-  img.addEventListener('load', onFrame);
-}
-
-// ════════════════════════════════════════════════════════════
-//  CGI COMMAND ENGINE
-//  Uses Image() to bypass CORS — the camera serves the CGI
-//  response as an image request, so it works without CORS headers.
-// ════════════════════════════════════════════════════════════
-function cgi(endpoint, params) {
-  if (!state.baseUrl) return;
-  const qs  = new URLSearchParams({ user: state.user, pwd: state.pass, ...params });
-  const url = `${state.baseUrl}/${endpoint}?${qs}&_=${Date.now()}`;
-  // Use Image() trick — bypasses CORS, fires the GET request
-  const img = new Image();
-  img.src = url;
-  // img loads or errors but we don't care — the camera executed it
-}
-
-function enc(s) { return encodeURIComponent(s); }
-
-// ════════════════════════════════════════════════════════════
-//  PTZ — FOSCAM COMMAND TABLE
-//  Command pairs: [start, stop]
-// ════════════════════════════════════════════════════════════
-const CMD = {
-  up:      { start: 0,  stop: 1  },
-  down:    { start: 2,  stop: 3  },
-  right:   { start: 4,  stop: 5  },
-  left:    { start: 6,  stop: 7  },
-  zoomout: { start: 16, stop: 17 },
-  zoomin:  { start: 18, stop: 19 },
-};
-
-function ptzStart(dir, btnEl) {
-  if (!state.connected) { log('Not connected.', 'warn'); return; }
-  if (state.ptzActive === dir) return; // already moving this dir
-
-  // Stop any previous movement first
-  if (state.ptzActive) ptzStop(state.ptzActive);
-
-  state.ptzActive = dir;
-  if (btnEl) btnEl.classList.add('active');
-  document.getElementById('s-ptz').textContent = dir.toUpperCase();
-
-  const speed = parseInt(document.getElementById('ptz-speed').value) || 3;
-  // Send start command immediately
-  cgi('decoder_control.cgi', { command: CMD[dir].start, speed });
-  log(`PTZ start: ${dir}`, 'info');
-
-  // Keep pinging every 400ms so the camera continues moving
-  // (some Foscam firmware needs repeated commands to keep moving)
-  clearInterval(state.ptzHoldTimer);
-  state.ptzHoldTimer = setInterval(() => {
-    cgi('decoder_control.cgi', { command: CMD[dir].start, speed });
-  }, 400);
-}
-
-function ptzStop(dir) {
-  clearInterval(state.ptzHoldTimer);
-  state.ptzHoldTimer = null;
-
-  const d = dir || state.ptzActive;
-  if (d && CMD[d]) {
-    cgi('decoder_control.cgi', { command: CMD[d].stop });
-    log(`PTZ stop: ${d}`, 'info');
-  }
-
-  state.ptzActive = null;
-  document.querySelectorAll('.ptz-btn').forEach(b => b.classList.remove('active'));
-  document.getElementById('s-ptz').textContent = 'stopped';
-}
-
-// ── Bind hold-to-move to a button element ────────────────────
-function bindPtz(el, dir) {
-  if (!el) return;
-  // Mouse
-  el.addEventListener('mousedown',  e => { e.preventDefault(); ptzStart(dir, el); });
-  el.addEventListener('mouseup',    () => ptzStop(dir));
-  el.addEventListener('mouseleave', () => { if (state.ptzActive === dir) ptzStop(dir); });
-  // Touch
-  el.addEventListener('touchstart', e => { e.preventDefault(); ptzStart(dir, el); }, { passive: false });
-  el.addEventListener('touchend',   e => { e.preventDefault(); ptzStop(dir); },      { passive: false });
-  el.addEventListener('touchcancel',e => { e.preventDefault(); ptzStop(dir); },      { passive: false });
-}
-
-// ════════════════════════════════════════════════════════════
-//  WIRE UP ALL PTZ BUTTONS (overlay + sidebar)
-// ════════════════════════════════════════════════════════════
-window.addEventListener('DOMContentLoaded', () => {
-  // Video overlay buttons
-  bindPtz(document.getElementById('btn-up'),      'up');
-  bindPtz(document.getElementById('btn-down'),    'down');
-  bindPtz(document.getElementById('btn-left'),    'left');
-  bindPtz(document.getElementById('btn-right'),   'right');
-  bindPtz(document.getElementById('btn-zoomin'),  'zoomin');
-  bindPtz(document.getElementById('btn-zoomout'), 'zoomout');
-
-  // Sidebar PTZ buttons
-  bindPtz(document.getElementById('sb-up'),      'up');
-  bindPtz(document.getElementById('sb-down'),    'down');
-  bindPtz(document.getElementById('sb-left'),    'left');
-  bindPtz(document.getElementById('sb-right'),   'right');
-  bindPtz(document.getElementById('sb-zoomin'),  'zoomin');
-  bindPtz(document.getElementById('sb-zoomout'), 'zoomout');
-
-  // Keyboard arrows
-  const keyMap = { ArrowUp:'up', ArrowDown:'down', ArrowLeft:'left', ArrowRight:'right' };
-  window.addEventListener('keydown', e => {
-    if (e.repeat) return;
-    if (keyMap[e.key]) { e.preventDefault(); ptzStart(keyMap[e.key]); }
-  });
-  window.addEventListener('keyup', e => {
-    if (keyMap[e.key]) ptzStop(keyMap[e.key]);
-  });
-
-  // Speed slider display
-  document.getElementById('ptz-speed').addEventListener('input', function() {
-    document.getElementById('speed-val').textContent = this.value;
-  });
-
-  // Auto-save on input change
-  document.querySelectorAll('input, select').forEach(el => {
-    el.addEventListener('change', saveSettings);
-  });
-
-  loadSettings();
-  log('Viewer ready — camera pre-configured at 192.168.100.155:13900', 'ok');
-  log('Hold PTZ buttons (or arrow keys) to move camera.', 'info');
+/* ── INIT ── */
+document.getElementById('inp-ip').addEventListener('input', updateUrlPreview);
+document.getElementById('inp-user').addEventListener('input', updateUrlPreview);
+document.getElementById('inp-pwd').addEventListener('input', updateUrlPreview);
+document.getElementById('speed-range').addEventListener('input', function(){
+  document.getElementById('speed-val').textContent = this.value;
 });
+document.addEventListener('contextmenu', e => e.preventDefault());
+buildPresets();
+updateUrlPreview();
+startClock();
 
-// Safety: release PTZ if window loses focus
-window.addEventListener('blur', () => { if (state.ptzActive) ptzStop(); });
-
-// ════════════════════════════════════════════════════════════
-//  IR CONTROL
-// ════════════════════════════════════════════════════════════
-const IR_LABELS = ['💡 IR AUTO', '💡 IR ON', '💡 IR OFF'];
-function toggleIR() {
-  state.irMode = (state.irMode + 1) % 3;
-  document.getElementById('ir-btn').textContent = IR_LABELS[state.irMode];
-  cgi('set_misc.cgi', { led_mode: state.irMode });
-  log(`IR mode: ${['auto','on','off'][state.irMode]}`, 'info');
+function buildPresets() {
+  const grid = document.getElementById('preset-grid');
+  grid.innerHTML = '';
+  PRESETS.forEach(p => {
+    const btn = document.createElement('button');
+    btn.className = 'preset-btn';
+    btn.id = 'preset-' + p.id;
+    btn.textContent = p.label;
+    btn.onclick = () => gotoOrSetPreset(p.id);
+    grid.appendChild(btn);
+  });
 }
 
-// ════════════════════════════════════════════════════════════
-//  PATROL
-// ════════════════════════════════════════════════════════════
-function patrol() {
-  const btn = document.getElementById('patrol-btn');
-  if (!state.patrolOn) {
-    cgi('decoder_control.cgi', { command: 26 });
-    state.patrolOn = true;
-    btn.textContent = '⏹ STOP PATROL';
-    log('Horizontal patrol started.', 'info');
+function updateUrlPreview() {
+  const ip = document.getElementById('inp-ip').value.trim();
+  const user = document.getElementById('inp-user').value.trim();
+  const url = `http://${ip}/videostream.cgi?user=${user}&pwd=***`;
+  document.getElementById('urlPreview').textContent = url;
+  document.getElementById('hdr-ip').textContent = ip;
+}
+
+function startClock() {
+  function tick() {
+    const now = new Date();
+    const t = now.toTimeString().slice(0,8);
+    document.getElementById('hdr-time').textContent = t;
+    document.getElementById('tsLabel').textContent = now.toLocaleDateString() + '  ' + t;
+  }
+  tick();
+  CAM.clockTimer = setInterval(tick, 1000);
+}
+
+/* ── CONNECT / DISCONNECT ── */
+function connect() {
+  CAM.ip   = document.getElementById('inp-ip').value.trim();
+  CAM.user = document.getElementById('inp-user').value.trim();
+  CAM.pwd  = document.getElementById('inp-pwd').value;
+
+  const streamUrl = `http://${CAM.ip}/videostream.cgi?user=${CAM.user}&pwd=${CAM.pwd}`;
+  const img = document.getElementById('stream');
+  img.src = streamUrl;
+
+  img.onload = () => {
+    document.getElementById('placeholder').style.display = 'none';
+    img.style.display = 'block';
+    setConnected(true);
+    log('Stream connected: ' + CAM.ip, 'ok');
+  };
+  img.onerror = () => {
+    // Try snapshot fallback
+    trySnapshotMode();
+  };
+
+  document.getElementById('overlayInfo').innerHTML =
+    `IP: ${CAM.ip}<br><span id="tsLabel">—</span>`;
+
+  log('Connecting to ' + CAM.ip + ' …', 'info');
+  setStatus('CONNECTING', false);
+}
+
+function trySnapshotMode() {
+  // Fallback: refresh snapshot every 500ms
+  const snapUrl = `http://${CAM.ip}/snapshot.cgi?user=${CAM.user}&pwd=${CAM.pwd}`;
+  const img = document.getElementById('stream');
+
+  let ok = false;
+  const testImg = new Image();
+  testImg.onload = () => {
+    ok = true;
+    document.getElementById('placeholder').style.display = 'none';
+    img.style.display = 'block';
+    setConnected(true);
+    log('Snapshot mode active (MJPEG fallback)', 'ok');
+    document.getElementById('qualBadge').textContent = 'SNAPSHOT · 2 FPS';
+    // refresh loop
+    CAM.streamTimer = setInterval(() => {
+      img.src = snapUrl + '&t=' + Date.now();
+    }, 500);
+  };
+  testImg.onerror = () => {
+    setStatus('ERROR', true);
+    setConnected(false);
+    log('Connection failed — check IP, credentials, and CORS', 'err');
+    toast('Connection failed. Check browser console for details.');
+  };
+  testImg.src = snapUrl + '&t=' + Date.now();
+}
+
+function disconnect() {
+  clearInterval(CAM.streamTimer);
+  const img = document.getElementById('stream');
+  img.src = '';
+  img.style.display = 'none';
+  document.getElementById('placeholder').style.display = 'flex';
+  setConnected(false);
+  log('Disconnected', 'info');
+  toast('Camera disconnected');
+}
+
+function setConnected(on) {
+  CAM.connected = on;
+  setStatus(on ? 'LIVE' : 'OFFLINE', !on);
+  document.getElementById('overlayRec').style.display = on ? 'flex' : 'none';
+  document.getElementById('btn-disconnect').style.display = on ? '' : 'none';
+  document.getElementById('btn-connect').textContent = on ? 'RECONNECT' : 'CONNECT';
+}
+
+function setStatus(txt, isError) {
+  const dot = document.getElementById('status-dot');
+  const label = document.getElementById('status-text');
+  dot.className = 'dot' + (txt === 'LIVE' ? ' live' : isError ? ' error' : '');
+  label.textContent = txt;
+}
+
+/* ── CGI COMMANDS ── */
+function cgiUrl(path, params = {}) {
+  let url = `http://${CAM.ip}/${path}?user=${CAM.user}&pwd=${CAM.pwd}`;
+  for (const [k, v] of Object.entries(params)) url += `&${k}=${v}`;
+  return url;
+}
+
+function sendCmd(cmd, extra = {}) {
+  if (!CAM.connected) { toast('Camera not connected'); return; }
+  const speed = parseInt(document.getElementById('speed-range').value);
+  const url = cgiUrl('decoder_control.cgi', { command: cmd, onestep: 0, ...extra });
+  fetch(url, { mode: 'no-cors' })
+    .then(() => log(`CMD ${cmd} sent`, 'ok'))
+    .catch(() => log(`CMD ${cmd} failed`, 'err'));
+}
+
+function startMove(cmd) {
+  if (!CAM.connected) { toast('Camera not connected'); return; }
+  const speed = parseInt(document.getElementById('speed-range').value);
+  const url = cgiUrl('decoder_control.cgi', { command: cmd, onestep: 0, speed });
+  fetch(url, { mode: 'no-cors' }).catch(() => {});
+  log(`PTZ move cmd=${cmd}`, 'ok');
+}
+
+function stopMove(cmd) {
+  if (!CAM.connected) return;
+  const url = cgiUrl('decoder_control.cgi', { command: cmd });
+  fetch(url, { mode: 'no-cors' }).catch(() => {});
+}
+
+/* ── PRESETS ── */
+function gotoOrSetPreset(id) {
+  if (!CAM.connected) { toast('Camera not connected'); return; }
+  if (CAM.settingPreset) {
+    const setCmd = 30 + (id * 2);
+    sendCmd(setCmd);
+    log(`Preset ${id+1} saved`, 'ok');
+    toast(`Preset ${id+1} saved`);
+    toggleSetMode(false);
   } else {
-    cgi('decoder_control.cgi', { command: 27 });
-    state.patrolOn = false;
-    btn.textContent = '↻ PATROL';
-    log('Patrol stopped.', 'info');
+    const goCmd = 31 + (id * 2);
+    sendCmd(goCmd);
+    log(`Go to preset ${id+1}`, 'info');
   }
 }
 
-// ════════════════════════════════════════════════════════════
-//  SNAPSHOT
-// ════════════════════════════════════════════════════════════
+function toggleSetMode(force) {
+  CAM.settingPreset = force !== undefined ? force : !CAM.settingPreset;
+  const btn = document.getElementById('btn-setmode');
+  const btns = document.querySelectorAll('.preset-btn');
+  if (CAM.settingPreset) {
+    btn.style.borderColor = 'var(--warn)';
+    btn.style.color = 'var(--warn)';
+    btn.textContent = '✕ CANCEL';
+    btns.forEach(b => b.classList.add('set-mode'));
+    toast('Click a preset slot to save current position');
+  } else {
+    btn.style.borderColor = '';btn.style.color = '';
+    btn.textContent = 'SET MODE';
+    btns.forEach(b => b.classList.remove('set-mode'));
+  }
+}
+
+/* ── PATROL ── */
+function togglePatrol() {
+  if (!CAM.connected) { toast('Camera not connected'); return; }
+  CAM.patrolling = !CAM.patrolling;
+  const cmd = CAM.patrolling ? 28 : 29;
+  sendCmd(cmd);
+  const btn = document.getElementById('btn-patrol');
+  btn.classList.toggle('active', CAM.patrolling);
+  btn.textContent = CAM.patrolling ? '⏹ STOP PATROL' : '⟳ H-PATROL';
+  log(CAM.patrolling ? 'H-Patrol started' : 'Patrol stopped', 'info');
+}
+
+/* ── SNAPSHOT ── */
 function takeSnapshot() {
-  if (!state.baseUrl) { log('Not connected.', 'warn'); return; }
-  const url = `${state.baseUrl}/snapshot.cgi?user=${enc(state.user)}&pwd=${enc(state.pass)}&t=${Date.now()}`;
-  const img  = new Image();
-  img.crossOrigin = 'anonymous';
-  img.onload = () => {
-    const now = new Date().toLocaleTimeString();
-    try {
-      const c   = document.createElement('canvas');
-      c.width   = img.naturalWidth  || 640;
-      c.height  = img.naturalHeight || 480;
-      c.getContext('2d').drawImage(img, 0, 0);
-      const dataUrl = c.toDataURL('image/jpeg', 0.9);
-      addThumb(dataUrl, now);
-      const a = document.createElement('a');
-      a.href = dataUrl; a.download = `snap_${Date.now()}.jpg`; a.click();
-      log(`Snapshot saved (${now}).`, 'ok');
-    } catch {
-      window.open(url, '_blank');
-      log('Snapshot opened (CORS — canvas blocked).', 'warn');
-    }
-  };
-  img.onerror = () => log('Snapshot request failed.', 'err');
-  img.src = url;
+  if (!CAM.connected) { toast('Camera not connected'); return; }
+  const url = cgiUrl('snapshot.cgi');
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `nessos_snap_${Date.now()}.jpg`;
+  a.target = '_blank';
+  a.click();
+  log('Snapshot captured', 'ok');
+  toast('Snapshot saved');
 }
 
-function addThumb(src, time) {
-  const grid  = document.getElementById('snap-grid');
-  const empty = grid.querySelector('.snap-empty');
-  if (empty) empty.remove();
-  if (grid.children.length >= 4) grid.removeChild(grid.firstChild);
-  const div = document.createElement('div');
-  div.className = 'snap-thumb';
-  div.innerHTML = `<img src="${src}"><span class="snap-time">${time}</span>`;
-  div.onclick   = () => window.open(src, '_blank');
-  grid.appendChild(div);
+/* ── FULLSCREEN ── */
+function toggleFullscreen() {
+  const vc = document.getElementById('videoContainer');
+  if (!document.fullscreenElement) {
+    vc.requestFullscreen && vc.requestFullscreen();
+  } else {
+    document.exitFullscreen && document.exitFullscreen();
+  }
 }
 
-// ════════════════════════════════════════════════════════════
-//  PERSIST SETTINGS
-// ════════════════════════════════════════════════════════════
-function saveSettings() {
-  try {
-    localStorage.setItem('nessos_cfg', JSON.stringify({
-      localIp:    document.getElementById('cam-ip').value,
-      localPort:  document.getElementById('cam-port').value,
-      remoteIp:   document.getElementById('cam-ip-remote').value,
-      remotePort: document.getElementById('cam-port-remote').value,
-      user:       document.getElementById('cam-user').value,
-      tab:        state.activeTab,
-    }));
-  } catch {}
+/* ── LOG ── */
+function log(msg, type = 'info') {
+  const box = document.getElementById('log-box');
+  const now = new Date().toTimeString().slice(0,8);
+  const span = document.createElement('span');
+  span.className = 'log-entry ' + type;
+  span.textContent = `[${now}] ${msg}`;
+  box.appendChild(span);
+  box.appendChild(document.createElement('br'));
+  box.scrollTop = box.scrollHeight;
 }
 
-function loadSettings() {
-  try {
-    const s = JSON.parse(localStorage.getItem('nessos_cfg'));
-    if (!s) return;
-    if (s.localIp)    document.getElementById('cam-ip').value         = s.localIp;
-    if (s.localPort)  document.getElementById('cam-port').value       = s.localPort;
-    if (s.remoteIp)   document.getElementById('cam-ip-remote').value  = s.remoteIp;
-    if (s.remotePort) document.getElementById('cam-port-remote').value= s.remotePort;
-    if (s.user)       document.getElementById('cam-user').value       = s.user;
-    log('Settings restored.', 'info');
-  } catch {}
+/* ── TOAST ── */
+function toast(msg, dur = 2200) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.classList.add('show');
+  setTimeout(() => el.classList.remove('show'), dur);
 }
+
+/* Prevent accidental movement release on mouseout */
+document.addEventListener('mouseup', () => {
+  // send stop to all axes just in case
+  if (CAM.connected) {
+    fetch(cgiUrl('decoder_control.cgi', {command:1}), {mode:'no-cors'}).catch(()=>{});
+  }
+});
 </script>
 </body>
 </html>
